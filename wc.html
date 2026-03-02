@@ -1,0 +1,2632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WC Premium Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Improved Header for Mobile */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px 15px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            border-left: 5px solid var(--primary);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            background: #dbeafe;
+            padding: 15px;
+            border-radius: 50%;
+        }
+
+        h1 {
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Mobile-first grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        @media (min-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr 400px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 767px) {
+            .container {
+                padding: 0 5px;
+            }
+            
+            header {
+                padding: 15px 10px;
+                margin-bottom: 15px;
+            }
+            
+            .logo {
+                gap: 10px;
+            }
+            
+            .logo i {
+                font-size: 2rem;
+                padding: 12px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .input-row {
+                gap: 10px;
+            }
+            
+            .form-controls {
+                flex-direction: column;
+            }
+            
+            .form-controls .btn {
+                width: 100%;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success:hover {
+            opacity: 0.9;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .input-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        td {
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .icon-btn-edit {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .icon-btn-delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        /* Summary Items */
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .summary-item.total {
+            border-top: 2px solid var(--primary);
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-top: 10px;
+            padding-top: 12px;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .highlight {
+            background: #f0f9ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        /* Discount/Loading Inputs */
+        .discount-inputs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        @media (min-width: 640px) {
+            .discount-inputs {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Footer - Improved for mobile */
+        footer {
+            text-align: center;
+            padding: 15px 10px;
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        footer p {
+            margin: 5px 0;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 767px) {
+            footer {
+                padding: 12px 8px;
+                font-size: 0.8rem;
+            }
+            
+            footer p {
+                line-height: 1.4;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 3% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            color: var(--gray);
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--dark);
+        }
+
+        /* Search box */
+        .search-container {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .search-container input {
+            padding-left: 40px;
+        }
+
+        .results-container {
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-top: 8px;
+            display: none;
+            position: absolute;
+            width: 100%;
+            background: white;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .trade-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .trade-item:hover {
+            background: #f1f5f9;
+        }
+
+        .trade-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .trade-rate {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Calculation Steps */
+        .calculation-steps {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .calculation-step {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border);
+            font-size: 0.9rem;
+        }
+
+        .calculation-step:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        /* Toggle for details */
+        .toggle-details {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 0;
+        }
+
+        .toggle-details i {
+            transition: transform 0.3s ease;
+        }
+
+        .details-collapsed {
+            display: none;
+        }
+
+        /* Premium Breakdown Tooltip */
+        .premium-breakdown {
+            position: relative;
+            cursor: help;
+            text-decoration: underline dotted;
+        }
+
+        .breakdown-tooltip {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            min-width: 250px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .premium-breakdown:hover .breakdown-tooltip {
+            display: block;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+        }
+
+        /* Print specific styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .modal-content {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <div>
+                    <h1>Employee Compensation Liability Premium Calculator</h1>
+                    <p class="subtitle">Calculate Workmen's Compensation Premium with Automated Tariff Rates</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- Left Column: Input Form & Categories -->
+            <div>
+                <!-- Office Details -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-building"></i> Office Details</h2>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="officeName">Office Name</label>
+                            <input type="text" id="officeName" placeholder="Enter office name">
+                        </div>
+                        <div class="input-group">
+                            <label for="officeCode">Office Code</label>
+                            <input type="text" id="officeCode" placeholder="Enter office code">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insured Details -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-user-tie"></i> Insured Details</h2>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="insuredName">Name</label>
+                            <input type="text" id="insuredName" placeholder="Enter insured name">
+                        </div>
+                        <div class="input-group">
+                            <label for="insuredMobile">Mobile No.</label>
+                            <input type="tel" id="insuredMobile" placeholder="Enter mobile number">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="insuredAddress">Address</label>
+                        <textarea id="insuredAddress" placeholder="Enter full address"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="insuredEmail">Email Address</label>
+                        <input type="email" id="insuredEmail" placeholder="Enter email address">
+                    </div>
+                </div>
+
+                <!-- Employee Category Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-user-plus"></i> Add Employee Category</h2>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="tradeSearch"><i class="fas fa-search"></i> Search Trade/Business</label>
+                        <div class="search-container">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="tradeSearch" placeholder="Type to search from 800+ trades...">
+                        </div>
+                        <div class="results-container" id="tradeResults"></div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="numEmployees"><i class="fas fa-users"></i> Number of Employees</label>
+                            <input type="number" id="numEmployees" min="1" value="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="wagePerMonth"><i class="fas fa-rupee-sign"></i> Wage per Month per Employee (Rs.)</label>
+                            <input type="number" id="wagePerMonth" min="0" value="15000">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="tradeRate"><i class="fas fa-percentage"></i> Rate (Per Mille)</label>
+                            <input type="number" id="tradeRate" step="0.01" readonly style="background:#f1f5f9">
+                        </div>
+                        <div class="input-group">
+                            <label for="tradeDescription"><i class="fas fa-file-alt"></i> Selected Trade</label>
+                            <input type="text" id="tradeDescription" readonly style="background:#f1f5f9">
+                        </div>
+                    </div>
+
+                    <div class="form-controls">
+                        <button class="btn btn-primary" id="addCategory">
+                            <i class="fas fa-plus-circle"></i> Add Category
+                        </button>
+                        <button class="btn btn-warning" id="resetForm">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Categories Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-list-alt"></i> Employee Categories</h2>
+                        <span class="badge" id="categoryCount">0 Categories</span>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="categoriesTable">
+                            <thead>
+                                <tr>
+                                    <th>Trade/Business</th>
+                                    <th>No. of Emp.</th>
+                                    <th>Wage/Month/Employee</th>
+                                    <th>Rate</th>
+                                    <th>Premium</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesBody">
+                                <!-- Dynamic rows will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="highlight">
+                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> First Rs. 15,000/month calculated at base rate, balance at 6.25% of rate (min Rs. 2)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Calculation & Details -->
+            <div>
+                <!-- Intermediary Details -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-handshake"></i> Intermediary Details</h2>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="intermediaryName">Name</label>
+                            <input type="text" id="intermediaryName" placeholder="Enter intermediary name">
+                        </div>
+                        <div class="input-group">
+                            <label for="intermediaryCode">Code</label>
+                            <input type="text" id="intermediaryCode" placeholder="Enter code">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="intermediaryMobile">Mobile No.</label>
+                        <input type="tel" id="intermediaryMobile" placeholder="Enter mobile number">
+                    </div>
+                </div>
+
+                <!-- Calculation Parameters -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-sliders-h"></i> Calculation Parameters</h2>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="period"><i class="fas fa-calendar-alt"></i> Period of Insurance (Months)</label>
+                        <select id="period">
+                            <option value="1">1 Month</option>
+                            <option value="2">2 Months</option>
+                            <option value="3">3 Months</option>
+                            <option value="4">4 Months</option>
+                            <option value="5">5 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="7">7 Months</option>
+                            <option value="8">8 Months</option>
+                            <option value="9">9 Months</option>
+                            <option value="10">10 Months</option>
+                            <option value="11">11 Months</option>
+                            <option value="12" selected>12 Months</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="medicalSI"><i class="fas fa-heartbeat"></i> Medical Expense SI per Employee</label>
+                        <select id="medicalSI">
+                            <option value="0">No Medical Cover</option>
+                            <option value="25000">Rs. 25,000</option>
+                            <option value="50000">Rs. 50,000</option>
+                            <option value="100000">Rs. 1,00,000</option>
+                        </select>
+                    </div>
+
+                    <div class="discount-inputs">
+                        <!-- Basic Discount/Loading -->
+                        <div class="input-group">
+                            <label for="basicDiscount">Basic Discount (%)</label>
+                            <input type="number" id="basicDiscount" step="0.01" min="0" max="100" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="basicLoading">Basic Loading (%)</label>
+                            <input type="number" id="basicLoading" step="0.01" min="0" max="100" value="0">
+                        </div>
+                        
+                        <!-- Medical Discount/Loading -->
+                        <div class="input-group">
+                            <label for="medicalDiscount">Medical Discount (%)</label>
+                            <input type="number" id="medicalDiscount" step="0.01" min="0" max="100" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="medicalLoading">Medical Loading (%)</label>
+                            <input type="number" id="medicalLoading" step="0.01" min="0" max="100" value="0">
+                        </div>
+                                                
+                        <div class="input-group">
+                            <label for="stampDuty">Stamp Duty (Rs.)</label>
+                            <input type="number" id="stampDuty" min="0" value="1">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculation Summary -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-calculator"></i> Premium Calculation</h2>
+                        <button class="btn btn-info btn-sm" id="toggleDetails">
+                            <i class="fas fa-eye"></i> Show Details
+                        </button>
+                    </div>
+
+                    <!-- Toggleable detailed calculation -->
+                    <div id="detailedCalculation" class="details-collapsed">
+                        <div class="calculation-steps">
+                            <div class="calculation-step">
+                                <strong>Basic Premium Calculation:</strong><br>
+                                For each category: (First Rs. 15,000 × Rate ÷ 1000) + (Balance Wage × Max(2, 6.25% of Rate) ÷ 1000)
+                            </div>
+                            <div class="calculation-step">
+                                <strong>Medical Premium:</strong><br>
+                                Basic Premium × Medical Loading %
+                            </div>
+                            <div class="calculation-step">
+                                <strong>Discounts Applied:</strong><br>
+                                • Basic Premium × Basic Discount %<br>
+                                • Medical Premium × Medical Discount %
+                            </div>
+                            <div class="calculation-step">
+                                <strong>Loadings Applied:</strong><br>
+                                • Basic Premium × Basic Loading %<br>
+                                • Medical Premium × Medical Loading %
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-item">
+                            <span>Basic Premium:</span>
+                            <span class="summary-value" id="basicPremium">Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Medical Expense Premium:</span>
+                            <span class="summary-value" id="medicalPremium">Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Basic Discount:</span>
+                            <span class="summary-value" id="basicDiscountDisplay">-Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Medical Discount:</span>
+                            <span class="summary-value" id="medicalDiscountDisplay">-Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Basic Loading:</span>
+                            <span class="summary-value" id="basicLoadingDisplay">+Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Medical Loading:</span>
+                            <span class="summary-value" id="medicalLoadingDisplay">+Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Stamp Duty:</span>
+                            <span class="summary-value" id="stampDutyDisplay">Rs. 0</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Net Premium:</span>
+                            <span class="summary-value" id="netPremium">Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>CGST (9%):</span>
+                            <span class="summary-value" id="cgst">Rs. 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>SGST (9%):</span>
+                            <span class="summary-value" id="sgst">Rs. 0</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Gross Premium Payable:</span>
+                            <span class="summary-value" id="grossPremium">Rs. 0</span>
+                        </div>
+                    </div>
+
+                    <div class="form-controls">
+                        <button class="btn btn-success" id="calculateBtn" style="flex:1;">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                        <button class="btn btn-primary" id="exportPdf" style="flex:1;">
+                            <i class="fas fa-file-pdf"></i> Generate Quote
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-chart-bar"></i> Quick Stats</h2>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Employees:</span>
+                        <span class="summary-value" id="totalEmployees">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Monthly Wage:</span>
+                        <span class="summary-value" id="totalWage">Rs. 0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Categories Added:</span>
+                        <span class="summary-value" id="totalCategories">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>WC Premium Calculator | Based on Standard Workmen's Compensation Tariff</p>
+            <p style="font-size:0.8rem; margin-top:5px;">This tool is for estimation purposes. Actual premium may vary.</p>
+        </footer>
+    </div>
+
+    <!-- PDF Export Modal -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="margin-bottom:20px; color: var(--primary);">
+                <i class="fas fa-file-pdf"></i> Premium Quotation
+            </h2>
+            <div id="pdfContent" style="max-height: 70vh; overflow-y: auto; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: white;">
+                <!-- PDF content will be generated here -->
+            </div>
+            <div class="form-controls" style="margin-top:20px;">
+                <button class="btn btn-success" id="downloadPdf" style="flex:1;">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+                <button class="btn btn-primary" id="printQuote" style="flex:1;">
+                    <i class="fas fa-print"></i> Print Quote
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include jsPDF and autotable -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        // Tariff data (same as before, truncated for brevity)
+        const tariffData = [
+            {id: 1, trade: "Advertisement Contractors Bill Posters and Distributors", rate: 12.15},
+{id: 2, trade: "Agricultural Farms", rate: 5.85},
+{id: 3, trade: "Aerated Water Manufacturers", rate: 15.1},
+{id: 4, trade: "Aircraft Manufacture - Pilots and employees who may at any time fly", rate: 121.6},
+{id: 5, trade: "Aircraft Manufacture - Wood-working machinists excl. travelling in Aircraft", rate: 30.15},
+{id: 6, trade: "Aircraft Manufacture - All employees excl. travelling in Aircraft", rate: 21.4},
+{id: 7, trade: "Aluminium Goods Mfg - Foundry hands, incl. Stampers", rate: 36.5},
+{id: 8, trade: "Aluminium Goods Mfg - All other employees", rate: 15.1},
+{id: 9, trade: "Aluminium Goods Mfg - Aluminium Powder and Paste Manufacturers", rate: 72.92},
+{id: 10, trade: "Analytical Chemists", rate: 7.8},
+{id: 11, trade: "Animal (wild) - Catching, keeping, training or working", rate: 60.8},
+{id: 12, trade: "Animal (wild) - Antimony Smelters and/or Extractors", rate: 30.15},
+{id: 13, trade: "Animal (wild) - Architects", rate: 5.85},
+{id: 14, trade: "Artificial Stone Makers - Hands engaged on Buildings", rate: 99999},
+{id: 15, trade: "Artificial Stone Makers - All others", rate: 30.15},
+{id: 16, trade: "Asbestos Cement Manufacturers - If Application work is done", rate: 30.15},
+{id: 17, trade: "Asbestos Cement Manufacturers - If no Application work is done", rate: 12.15},
+{id: 18, trade: "Athletic, Fishing, Gymnastic, Cricket and Golf Goods Manufacturers - Wood working machinists", rate: 30.15},
+{id: 19, trade: "Athletic, Fishing, Gymnastic, Cricket and Golf Goods Manufacturers - All others employees", rate: 36.5},
+{id: 20, trade: "Auctioneers - Surveying and inventory making clerks", rate: 5.85},
+{id: 21, trade: "Auctioneers - Others clerks", rate: 2.45},
+{id: 22, trade: "Auctioneers - Porters and assistants excl. risk connection with horses and livestock", rate: 18.5},
+{id: 23, trade: "Auctioneers - Porters and assistants for horses and livestock", rate: 60.8},
+{id: 24, trade: "Aviation Companies of Firms engaged in flying only and where no manufacture is carried on - Pilots and employees who may at any time fly", rate: 97.3},
+{id: 25, trade: "Aviation Companies of Firms engaged in flying only and where no manufacture is carried on - All other employees", rate: 12.15},
+{id: 26, trade: "Badami Compressed Coal Manufactures", rate: 24.3},
+{id: 27, trade: "Bakelite and Bakelite Goods Makers (as separate trade)", rate: 12.15},
+{id: 28, trade: "Bakeries and Biscuit Factories - Employees engaged with Machinery", rate: 12.15},
+{id: 29, trade: "Bakeries and Biscuit Factories - All Employees not engaged with Machinery", rate: 5.85},
+{id: 30, trade: "Bamboo and Bentwood Furniture Makers - Woodworking machinists", rate: 30.15},
+{id: 31, trade: "Bamboo and Bentwood Furniture Makers - All other employees", rate: 12.15},
+{id: 32, trade: "Barge, Boat, Launch and Yatch only Builders - Woodworking machinists", rate: 30.15},
+{id: 33, trade: "Barge, Boat, Launch and Yatch only Builders - All other employees", rate: 18.5},
+{id: 34, trade: "Barometer Hydrometer, Thermometer, Mathematical, Nautical and Surgical Instruments and Appliance Makers, Watchmakers and Opticians - All Employees", rate: 5.85},
+{id: 35, trade: "Basket Makers - Osier and willow cutting", rate: 18.5},
+{id: 36, trade: "Basket Makers - Woodworking machinists", rate: 30.15},
+{id: 37, trade: "Basket Makers - All other employees", rate: 9.25},
+{id: 38, trade: "Battery Service Station - All employees excl. batteries makers and erectors", rate: 15.1},
+{id: 39, trade: "Bedding and Mattress Manufacturers - Excl. wire risk", rate: 9.25},
+{id: 40, trade: "Bedding and Mattress Manufacturers - Wire mattresses - Woodworking machinists", rate: 30.15},
+{id: 41, trade: "Bedding and Mattress Manufacturers - Wire mattresses - All other employees incl. wire risk", rate: 18.5},
+{id: 42, trade: "Bedstead Manufacturers (Metal)", rate: 15.1},
+{id: 43, trade: "Belting Manufacturers", rate: 12.15},
+{id: 44, trade: "Bedding and Mattress Manufacturers - Billiard Makers and Billiard Saloons", rate: 9.25},
+{id: 45, trade: "Billiard Tables Makers - Woodworking machinists", rate: 30.15},
+{id: 46, trade: "Billiard Tables Makers - All other employees", rate: 12.15},
+{id: 47, trade: "Billposters and Distributor", rate: 30.15},
+{id: 48, trade: "Bitumen Lined Paper Manufacturers - All other employees", rate: 30.15},
+{id: 49, trade: "Bitumen Lined Paper Manufacturers - Bitumen refineries", rate: 54.5},
+{id: 50, trade: "Blacking and Boot, Metal and furniture polish Mfgrs", rate: 15.1},
+{id: 51, trade: "Blacksmiths and Farriers", rate: 18.5},
+{id: 52, trade: "Blast Furnaces (iron production)", rate: 67.1},
+{id: 53, trade: "Bobbin and Shuttle Makers, Wooden - Woodworking machinists", rate: 30.15},
+{id: 54, trade: "Bobbin and Shuttle Makers, Wooden - All other employees", rate: 18.5},
+{id: 55, trade: "Boiler Makers and Repairers - Incl. Erection", rate: 36.5},
+{id: 56, trade: "Boiler Makers and Repairers - Boiler scalers", rate: 72.95},
+{id: 57, trade: "Bone mills - Incl. Anthrax", rate: 27.25},
+{id: 58, trade: "Bone mills - Excl. Anthrax", rate: 21.4},
+{id: 59, trade: "Bookbinder (with or without machinery)", rate: 9.25},
+{id: 60, trade: "Boot & Shoe Manufacturers and Factories (Wholesale)", rate: 18.5},
+{id: 61, trade: "Boot & Shoe Dealers, Makers and Repairers (Retail)", rate: 5.85},
+{id: 62, trade: "Brass Founders, Workers and Finishers - Foundry hands", rate: 24.3},
+{id: 63, trade: "Brass Founders, Workers and Finishers - All other employees", rate: 12.15},
+{id: 64, trade: "Brewers incl. coopers & all processes incidental to the trade and maintenance staff", rate: 9.25},
+{id: 65, trade: "Brick and Tile Makers - Where no machinery is used; excl. clay or blaes getting below 6 metres", rate: 15.1},
+{id: 66, trade: "Brick and Tile Makers - Where any machinery is used; excl. clay or blaes getting below 6 metres", rate: 24.3},
+{id: 67, trade: "Brick and Tile Makers - All employees engaged in clay or blaes-getting below 6 metres excl. pit or mine", rate: 36.5},
+{id: 68, trade: "Brush Manufacturers - Wood-working machinists", rate: 30.15},
+{id: 69, trade: "Brush Manufacturers - All other employees (excl. Anthrax)", rate: 5.85},
+{id: 70, trade: "Brush Manufacturers - All other employees (incl. Anthrax)", rate: 9.25},
+{id: 71, trade: "Builders - Excl. blasting and tunneling", rate: 30},
+{id: 72, trade: "Builders - Incl. blasting and tunneling", rate: 72.95},
+{id: 73, trade: "Builders - Steeple, Tower and chimney shaft builders or repairers", rate: 97.3},
+{id: 74, trade: "Builders, Material and Stone, Slate and Pottery Dealers - Employees engaged in loading and unloading vessels", rate: 97.3},
+{id: 75, trade: "Builders, Material and Stone, Slate and Pottery Dealers - All other employees", rate: 24.3},
+{id: 76, trade: "Button, Buckle, Hook and Eye Manufacturers - Metal", rate: 6.25},
+{id: 77, trade: "Button, Buckle, Hook and Eye Manufacturers - Other than Metal", rate: 14.85},
+{id: 78, trade: "Cabinet Makers - Woodworking machinists", rate: 30.15},
+{id: 79, trade: "Cabinet Makers - All other employees", rate: 9.25},
+{id: 80, trade: "Candle Manufacturers and Tallow Candlers", rate: 24.3},
+{id: 81, trade: "Canneries - Tin making", rate: 30.15},
+{id: 82, trade: "Canneries - All other employees", rate: 18.5},
+{id: 83, trade: "Canvas and webbing equipments manufacturers - Where carried on as a separate trade", rate: 24.3},
+{id: 84, trade: "Canvas and webbing equipments manufacturers - Where carried on in a Cotton jute mill", rate: 7.8},
+{id: 85, trade: "Canvassers", rate: 3.9},
+{id: 86, trade: "Card, Cardboard, Strawboard and Millboard Makers -", rate: 30.15},
+{id: 87, trade: "Cardboard Box and Paper Box Manufacturers - Machinists", rate: 15.1},
+{id: 88, trade: "Cardboard Box and Paper Box Manufacturers - All other employees", rate: 12.15},
+{id: 89, trade: "Caretakers Durwans, Chowkidars and Gatekeepers (except in classifications for which an all-round rate is to be applied under regulation II)", rate: 5.85},
+{id: 90, trade: "Carman and Cartage and Contractors - Incl. Motor Transport companies (not passenger carrying)", rate: 42.8},
+{id: 91, trade: "Carbon Papers, Typewriter Ribbons, Inks and Stamp Pad Mfgrs. - Woodworking machinist", rate: 30.15},
+{id: 92, trade: "Carbon Papers, Typewriter Ribbons, Inks and Stamp Pad Mfgrs. - All other employees", rate: 18.5},
+{id: 93, trade: "Carpenters and joiners - who only undertake contracts for woodwork - Woodworking machinist", rate: 30.15},
+{id: 94, trade: "Carpenters and joiners - who only undertake contracts for woodwork - All other employees", rate: 9.25},
+{id: 95, trade: "Carpet and Rug Mfgtrs. Sorters - Incl. Anthrax", rate: 24.3},
+{id: 96, trade: "Carpet and Rug Mfgtrs. Sorters - Excl. Anthrax", rate: 12.15},
+{id: 97, trade: "Carpet and Rug Mfgtrs. Sorters - All other employees, hand work only", rate: 12.15},
+{id: 98, trade: "Carpet and Rug Mfgtrs. Sorters - All other employees, engaged in machinery", rate: 24.3},
+{id: 99, trade: "Carriage Gharry and/or Livery Stable Proprietors -Not undertaking carriage contracts", rate: 30.15},
+{id: 100, trade: "Carvers in Stone, Masons and Monumental Masons where carried on as a separate trade - On Buildings", rate: 99999},
+{id: 101, trade: "Carvers in Stone, Masons and Monumental Masons where carried on as a separate trade - All Others", rate: 24.3},
+{id: 102, trade: "Carvers in Stone, Masons and Monumental Masons where carried on as a separate trade - Employees on board vessels off-shore Plat forms and/or Rigs engaged solely upon catering duties", rate: 72.95},
+{id: 103, trade: "Celluloid and Celluloid goods makers", rate: 48.65},
+{id: 104, trade: "Cement Hollow Block Mfgrs.- Where no machinery is used", rate: 12.15},
+{id: 105, trade: "Cement Hollow Block Mfgrs.- Where any machinery is used", rate: 21.4},
+{id: 106, trade: "Cement Works - Excl. Quarry or Mining Risk (Quarry and Mining Risks to be rated Separately)", rate: 42.8},
+{id: 107, trade: "Chair Makers - Woodworking machinists", rate: 30.15},
+{id: 108, trade: "Chair Makers - All other employees", rate: 12.15},
+{id: 109, trade: "Chemical Works - Incl. acid, Alizarine, alkali, alum, ammonia, aniline, arsenic bichromate of potash, borax, sheep dip and soda works", rate: 18.5},
+{id: 110, trade: "Chemical Works - Chemists and Druggists (Manufacturing) and Patent Medicine Mfgrs.", rate: 7.8},
+{id: 111, trade: "Christmas Cracker Makers", rate: 18.5},
+{id: 112, trade: "Cinchona Estates - Employees on Factory Register", rate: 5.85},
+{id: 113, trade: "Cinchona Estates - Domestic Servants whose names appear on the Factory or garden register who are paid wholly by estate", rate: 2.9},
+{id: 114, trade: "Cinchona Estates - All other employees", rate: 2.9},
+{id: 115, trade: "Cinematograph Theaters and Exhibitors - All employees incl. clerical and managers but excl. film production", rate: 3.9},
+{id: 116, trade: "Cinematograph Film Producers - To be submitted for special rating", rate: 99999},
+{id: 117, trade: "Circus, Fair Pleasure Ground Proprietors - All employees", rate: 60.8},
+{id: 118, trade: "Circus, Fair Pleasure Ground Proprietors - Clerical Staff - Engaged in trade on mercantile employment (Duties strictly limited to indoor clerical work)", rate: 2.45},
+{id: 119, trade: "Clothing & Underclothing Mfgrs.- (Wholesale)", rate: 5.85},
+{id: 120, trade: "Club Servants - All employees incl. Waiters", rate: 4.35},
+{id: 121, trade: "Coach, Carriage, Bus Body and Wagon Builders and Wheelwrights - Excl. Railway Coach and Railway Wagon Building and Repairing Woodworking machinists", rate: 30.15},
+{id: 122, trade: "Coach, Carriage, Bus Body and Wagon Builders and Wheelwrights - All other employees", rate: 15.1},
+{id: 123, trade: "Coal Merchants & Dealers - Employees engaged in loading and discharging vessels", rate: 97.3},
+{id: 124, trade: "Coal Merchants & Dealers - Carters and all other employees", rate: 45.7},
+{id: 125, trade: "Cocoa Fibre Works, Mat and Matting Makers", rate: 5.85},
+{id: 126, trade: "Coffee Curing works Where carried on as a separate trade - Employees engaged inside the factory", rate: 5.85},
+{id: 127, trade: "Coffee Curing works Where carried on as a separate trade - Woodworking machinists", rate: 30.15},
+{id: 128, trade: "Coffee Curing works Where carried on as a separate trade - Employees engaged outside the factory", rate: 2.9},
+{id: 129, trade: "Coffee Estate - Domestic Servants whose names appear on the Factory or garden register who are paid wholly by estate", rate: 2.9},
+{id: 130, trade: "Coffee Estate - All other employees", rate: 4.35},
+{id: 131, trade: "Coffee Roasters and Essence Mfgrs. -", rate: 5.85},
+{id: 132, trade: "Coir Presses - Press employees", rate: 15.1},
+{id: 133, trade: "Coir Presses - Godown coolies (not engaged in delivering for shipment)", rate: 5.85},
+{id: 134, trade: "Coke Mfgrs.- Incl. erecting of ovens", rate: 18.5},
+{id: 135, trade: "Cold Storage Warehouses", rate: 18.5},
+{id: 136, trade: "Collieries - Whole Risk (Fiery) - Pits", rate: 72.95},
+{id: 137, trade: "Collieries - Whole Risk (Fiery) - Inclines & Levels (Minimum premium Rs. 800)", rate: 60.8},
+{id: 138, trade: "Collieries - Fatal Only (Fiery) - Pits", rate: 54.5},
+{id: 139, trade: "Collieries - Fatal Only (Fiery) - Inclines & Levels (Minimum of Rs. 480)", rate: 45.7},
+{id: 140, trade: "Commercial Travellers - Employees using Motor Cycles/Scooters", rate: 18.25},
+{id: 141, trade: "Commercial Travellers - All other employees", rate: 3.9},
+{id: 142, trade: "Condiment Mfgrs. - Confectioners - Employees engaged with machinery", rate: 12.15},
+{id: 143, trade: "Condiment Mfgrs. - Confectioners - Employees not engaged with machinery", rate: 5.85},
+{id: 144, trade: "Container Manufacture where no mechanically drives machines and/or chemical is used", rate: 18.5},
+{id: 145, trade: "Coopers & Vat Makers - Woodworking machinists", rate: 30.15},
+{id: 146, trade: "Coopers & Vat Makers - All other employees", rate: 12.15},
+{id: 147, trade: "Copper T Manufacture", rate: 5.85},
+{id: 148, trade: "Cordial (Fruit) and Canned Fruit Mfgrs. - Employees engaged in agricultural work on Fruit Farm", rate: 5.85},
+{id: 149, trade: "Cordial (Fruit) and Canned Fruit Mfgrs. - All other Employees engaged in the manufacture of Fruit Cordial and Canned Fruit - If aerated waters are manufactured", rate: 15.1},
+{id: 150, trade: "Cordial (Fruit) and Canned Fruit Mfgrs. - All other Employees engaged in the manufacture of Fruit Cordial and Canned Fruit - If no aerated waters are manufactured", rate: 12.15},
+{id: 151, trade: "Coal and Geological Drilling - On land", rate: 15.1},
+{id: 152, trade: "Coal and Geological Drilling - On River Beds", rate: 36.5},
+{id: 153, trade: "Corn and Flour Millers", rate: 99999},
+{id: 154, trade: "Cotton Mills - All process incl. Mill Godowns N.B. Weaving & Printing of cloth by hand power", rate: 7.8},
+{id: 155, trade: "Cotton Ginning and pressing Factories and Presses - Calcutta and Delhi Region", rate: 27.75},
+{id: 156, trade: "Cotton Ginning and pressing Factories and Presses - Other Regions", rate: 12.15},
+{id: 157, trade: "Cotton Godowns and Warehouses", rate: 30.15},
+{id: 158, trade: "Cotton Bales, loading and unloading into Railway Wagons, incl. delivery - (where delivery undertaken by an Independent Contractor, the rate for 'Carmen and Cartage Contractors' to apply)", rate: 30.15},
+{id: 159, trade: "Cotton Wadding Mfgrs.-", rate: 24.3},
+{id: 160, trade: "Cotton Waste Merchants - All employees", rate: 18.5},
+{id: 161, trade: "Crane Drivers", rate: 36.5},
+{id: 162, trade: "Crews of Country Craft plying between coastal Ports", rate: 121.6},
+{id: 163, trade: "Dairies - Wholesale", rate: 15.1},
+{id: 164, trade: "Dairies - Shop risks", rate: 7.8},
+{id: 165, trade: "Dairies - Delivery by hand, handcraft, Cycle or tricycle", rate: 9.25},
+{id: 166, trade: "Dairies - Otherwise, but excl. loading and unloading of craft or vessels", rate: 18.5},
+{id: 167, trade: "Dentists - With or without Mechanics N.B. All risks entailing the use of radium, radio-active substances or X-ray apparatus must be submitted to the Committee for Special Rating", rate: 9.25},
+{id: 168, trade: "Die Cutters and/or Sinkers Incl. Engraving", rate: 21.4},
+{id: 169, trade: "Disinfectant Mfgrs. - Excl. Dyewood Grinders", rate: 12.15},
+{id: 170, trade: "Distilleries", rate: 12.15},
+{id: 171, trade: "Divers", rate: 170.25},
+{id: 172, trade: "Docks - Dock service under takings (Excl. Stevedores)", rate: 36.5},
+{id: 173, trade: "Dock Pier and Wharf construction maintenance and/or repairs", rate: 36.5},
+{id: 174, trade: "Docks - Construction - (excl. blasting )", rate: 48.65},
+{id: 175, trade: "Docks - Construction - Employees engaged in blasting", rate: 97.3},
+{id: 176, trade: "Domestic Servants - Bearers, Khitmatgars, Hamals, Cooks, Sweepers and Mehters", rate: 4.9},
+{id: 177, trade: "Domestic Servants - Mali", rate: 7.3},
+{id: 178, trade: "Domestic Servants - Syce (Horse)", rate: 14.6},
+{id: 179, trade: "Domestic Servants - Motor Car Driver, Cleaners and attendants", rate: 24.3},
+{id: 180, trade: "Domestic Servants - Doctors' Dispensers, Assistants and Locum Tenens", rate: 5.85},
+{id: 181, trade: "Dry Ice Mfgrs.", rate: 36.5},
+{id: 182, trade: "Dyers, Dressers and Mercerisers", rate: 18.5},
+{id: 183, trade: "Dyewood Grinders", rate: 18.5},
+{id: 184, trade: "Dye Grinding and Mixing Works (Not Dyewood grinding but only dye substances powdered and subsequently mixed)", rate: 12.15},
+{id: 185, trade: "Educational Training Institutions, Schools and College Staff (Excl. Veterinary Colleges) - Clerical Staff", rate: 2.45},
+{id: 186, trade: "Educational Training Institutions, Schools and College Staff (Excl. Veterinary Colleges) - Masters, Mistresses and male and female assistants", rate: 2.9},
+{id: 187, trade: "Educational Training Institutions, Schools and College Staff (Excl. Veterinary Colleges) - All other employees", rate: 4.35},
+{id: 188, trade: "Electricity - Light and/or Power Supply - All employees inside and out", rate: 21.4},
+{id: 189, trade: "Electrical Engineers (not manufacturers) Installation and repair of plant, fittings and Appartus incl. wireless, telephone and telegraph - Work on ships and underground in mines and quarries", rate: 36.5},
+{id: 190, trade: "Electrical Engineers (not manufacturers) - Work in generating stations, cinemas, factories, theaters, music halls, public halls and similar buildings and roofs of railway station over 9 metres height or where any unit is handled exceeding 12.7 Kilogram in weight", rate: 21.4},
+{id: 191, trade: "Electrical Engineers (not manufacturers) - Work other buildings and roofs of railway station over 9 metres height or where any unit is handled exceeding 12.7 Kilogram in weight", rate: 18.5},
+{id: 192, trade: "Electrical Engineers (manufacturers) - Makers of fittings and apparatus incl. wireless, telephone and telegraph T.V. and Radio cum Recorder Manufacturers' and Computer Companies manufacturing - Shop and yard risk only - Where any unit is handled exceeding 12.7 Kilograms in weight when completed for use", rate: 18.5},
+{id: 193, trade: "Electrical Engineers (manufacturers) - Makers of fittings and apparatus incl. wireless, telephone and telegraph T.V. and Radio cum Recorder Manufacturers' and Computer Companies manufacturing - Shop and yard risk only - Where no unit is handled exceeding 12.7 Kilograms in weight when completed for use", rate: 12.15},
+{id: 194, trade: "Electrical Engineers (manufacturers) - Makers of fittings and apparatus incl. wireless, telephone and telegraph T.V. and Radio cum Recorder Manufacturers' and Computer Companies manufacturing - Work away from Shop and yard Rate as Electrical Engineers (not manufacturers) Batteries", rate: 99999},
+{id: 195, trade: "Electrical Engineers (manufacturers) - Accumulator and storage batteries makers and erectors", rate: 18.5},
+{id: 196, trade: "Electrical Engineers (manufacturers) - Dry Battery and portable electric and torch makers, button cell Mfgrs.", rate: 9.25},
+{id: 197, trade: "Electric Cables, Makers and suppliers of incl. Cablelaying, installation and Erection work - Shop or yard risk only incl. Carrying", rate: 15.1},
+{id: 198, trade: "Electric Cables, Makers and suppliers of incl. Cablelaying, installation and Erection work - All work away from shop or yard", rate: 60.8},
+{id: 199, trade: "Electric Lights and Telephone Wire Coverers - Electric Sign Makers - Erection", rate: 72.95},
+{id: 200, trade: "Electric Lights and Telephone Wire Coverers - Electric Sign Makers - All other work", rate: 18.5},
+{id: 201, trade: "Electric Refrigerators and Air Conditioners Assembling, Installation Maintenance and Repairs - (a) Domestic purposes - (i) Service men using motor cycles", rate: 18.5},
+{id: 202, trade: "Electric Refrigerators and Air Conditioners Assembling, Installation Maintenance and Repairs - (a) Domestic purposes - (ii) All other employees", rate: 9.25},
+{id: 203, trade: "Electric Refrigerators and Air Conditioners Assembling, Installation Maintenance and Repairs - (b) Commercial purposes", rate: 22.1},
+{id: 204, trade: "Electric Refrigerators and Air Conditioners Assembling, Installation Maintenance and Repairs - Electro-Silver and Nickel Plate Manufacturers and Metal Polishers and Platers -", rate: 9.25},
+{id: 205, trade: "Electric Refrigerators and Air Conditioners Assembling, Installation Maintenance and Repairs -Telephone Operators", rate: 5.85},
+{id: 206, trade: "Electric Refrigerators and Air Conditioners Assembling, Installation Maintenance and Repairs - Wireless Engineers - See Electrical Engineers (not manufacturers)", rate: 99999},
+{id: 207, trade: "Electric Refrigerators and Air Conditioners Assembling, Installation Maintenance and Repairs - Wireless Schools - Tuition and demonstration", rate: 30.15},
+{id: 208, trade: "Elephants - catching, training keeping or working To be submitted special rating", rate: 99999},
+{id: 209, trade: "Embroidery Mills -All other employees", rate: 7.8},
+{id: 210, trade: "Emery Cloth, Glass and sand Paper and cleaning Powder Mfgrs.-", rate: 15.1},
+{id: 211, trade: "Enamellers and Japanners - Where carried on as separate trade - Metal only", rate: 18.5},
+{id: 212, trade: "Enamellers and Japanners - Where carried on as separate trade - All other materials", rate: 30.15},
+{id: 213, trade: "Engineers - Bridge building - (i) Brick, stone, timber and concrete upto 6 metres in height from road or water level at low tide", rate: 36.5},
+{id: 214, trade: "Engineers - Bridge building - (ii) Brick, stone, timber and concrete over 6 metres in height from road or water level at low tide", rate: 60.8},
+{id: 215, trade: "Engineers - Bridge building - (iii)  Column and Girder (a) Shop or yard risk", rate: 42.8},
+{id: 216, trade: "Engineers - Bridge building - (iii)  Column and Girder (b) Erection away from shop or yard", rate: 60.8},
+{id: 217, trade: "Engineers - Colliery and Mining Machinery - Shop or Yard risk only, incl. Carting", rate: 21.4},
+{id: 218, trade: "Engineers - Colliery and Mining Machinery - Fixing, repairing, excl. sinking add chimney shaft erecting", rate: 24.3},
+{id: 219, trade: "Engineers - Cranes - Shop or yard risk only", rate: 36.5},
+{id: 220, trade: "Engineers - Cranes - All work away from Shop or yard", rate: 60.8},
+{id: 221, trade: "Engineers - Gasometers and Tanks - Shop or yard risk only, incl. Carting", rate: 36.5},
+{id: 222, trade: "Engineers - Gasometers and Tanks - All work away from Shop or yard", rate: 72.95},
+{id: 223, trade: "Engineers - Hydraulic Machinery excl. Lift and Crane making and erecting - Shop or yard risk only", rate: 36.5},
+{id: 224, trade: "Engineers - Hydraulic Machinery excl. Lift and Crane making and erecting - Erecting away from Shop or yard", rate: 24.3},
+{id: 225, trade: "Engineers - Lifts - Shop or yard risk only", rate: 21.4},
+{id: 226, trade: "Engineers - Lifts - Work away from Shop or yard excl. shaft sinking", rate: 24.3},
+{id: 227, trade: "Engineers - Shaft sinking", rate: 170.25},
+{id: 228, trade: "Engineers not otherwise classified - Incl. work away from shop or yard upto 9 mtrs height", rate: 27.25},
+{id: 229, trade: "Engineers not otherwise classified - Incl. work away from shop or yard exceeding 9 mts high", rate: 60.8},
+{id: 230, trade: "Excavation, Earth Removal and Filling and Reclamation (not for Sewers and Roads) - Excl. use of explosives blasting, Tunnelling and quarrying", rate: 30},
+{id: 231, trade: "Excavation, Earth Removal and Filling and Reclamation (not for Sewers and Roads) - Incl. blasting and tunelling", rate: 72.95},
+{id: 232, trade: "Explosives Manufacturers - Nitroglycerine based Explosives", rate: 75},
+{id: 233, trade: "Explosives Manufacturers - Non-Nitroglycerine based Explosives", rate: 60},
+{id: 234, trade: "Explosives Manufacturers - Slurry Explosives", rate: 60},
+{id: 235, trade: "Feathers Manufacturers, Dressers, Purifiers and Merchants", rate: 7.8},
+{id: 236, trade: "Ferry & Launch Owners (excl. Towing) - Mechanically propelled and 50 tons net tonnage or over Ferry & Launch Owners (excl. towing)", rate: 30.15},
+{id: 237, trade: "Ferry & Launch Owners (excl. Towing) - Mechanically propelled and under 50 tons net tonnage", rate: 48.65},
+{id: 238, trade: "Ferry & Launch Owners (excl. Towing) - Otherwise than Mechanically Propelled", rate: 72.95},
+{id: 239, trade: "Fire Brigades (on total sums paid)", rate: 72.95},
+{id: 240, trade: "Fire Extinguishing Appliances Makers", rate: 24.3},
+{id: 241, trade: "Fire Loss Assessors", rate: 24.3},
+{id: 242, trade: "Fire Work Mfgrs. - Where hand power only is used", rate: 97.3},
+{id: 243, trade: "Fire Work Mfgrs. - Where any mechanically driven machinery is used", rate: 121.6},
+{id: 244, trade: "Fish Dehydrating", rate: 24.3},
+{id: 245, trade: "Flag, Banner and Bunting Makers - Excl. erection, decoration tents and mosques", rate: 12.15},
+{id: 246, trade: "Flag, Banner and Bunting Makers - Incl. Erection", rate: 24.3},
+{id: 247, trade: "Floorcloth Linoleum Mfgrs.", rate: 30.15},
+{id: 248, trade: "Flour and Dal Mills", rate: 15.1},
+{id: 249, trade: "Forge Masters", rate: 30.15},
+{id: 250, trade: "Forwarding and Shipping Agent's Receiving Offices, Depots and Godowns - Delivery", rate: 99999},
+{id: 251, trade: "Forwarding and Shipping Agent's Receiving Offices, Depots and Godowns - All other employees", rate: 15.1},
+{id: 252, trade: "Frozen Food Mfgrs.", rate: 18.5},
+{id: 253, trade: "Furniture Dealers and Removers and Depository Proprietors - Retail Shop and Excl. Delivery and Cartage", rate: 12.15},
+{id: 254, trade: "Furniture Dealers and Removers and Depository Proprietors - Removers and Depository hands", rate: 36.5},
+{id: 255, trade: "Furniture Mfgrs. other than machine hand moulded/plastic to be included - Sheet Metal", rate: 30.15},
+{id: 256, trade: "Furniture Mfgrs. other than machine hand moulded/plastic to be included - Other than Sheet Metal - Woodworking machinists", rate: 30.15},
+{id: 257, trade: "Furniture Mfgrs. other than machine hand moulded/plastic to be included - Other than Sheet Metal - All other employees", rate: 9.25},
+{id: 258, trade: "Furriers - Retail Shop risk", rate: 7.8},
+{id: 259, trade: "Furriers - Wholesale dealers - Excl. handling of raw skins", rate: 10.7},
+{id: 260, trade: "Furriers - Wholesale dealers - Incl. handling of raw skins", rate: 15.1},
+{id: 261, trade: "Galvanising - Where carried on as separate trade", rate: 30.15},
+{id: 262, trade: "Gas mantle (incandescent) makers", rate: 9.25},
+{id: 263, trade: "Gas Mfgrs - Coal - All Employees incl. Fitters, meter readers, collectors, inspectors but all excl. gasometer erection painting and repairing demolishers", rate: 2.15},
+{id: 264, trade: "Gas Mfgrs - Gas Mfgrs - Oxygen-and other gases", rate: 18.5},
+{id: 265, trade: "Gasometer painting and repairing", rate: 72.95},
+{id: 266, trade: "Gas proofing of material when carried on as a separate Trade", rate: 12.15},
+{id: 267, trade: "Gelatins, Glue, Size and Isinglass Mfgrs", rate: 24.3},
+{id: 268, trade: "Ghee Mfgrs", rate: 9.25},
+{id: 269, trade: "Glass Mfgrs - Stained - Excl. erection and lead poisoning", rate: 10.7},
+{id: 270, trade: "Glass Mfgrs - Stained - Incl. erection and lead poisoning", rate: 21.4},
+{id: 271, trade: "Glass Mfgrs - Domestic articles such as glasses and decanters", rate: 10.7},
+{id: 272, trade: "Glass Mfgrs - Bottle", rate: 9.25},
+{id: 273, trade: "Glass Mfgrs - Sheet and Plate", rate: 12.15},
+{id: 274, trade: "Glass Mfgrs - Bevellers and Silverers", rate: 15.1},
+{id: 275, trade: "Glass Mfgrs - Embossers, Gliders, Decorators and Glass Sign writers incl. Erection", rate: 15.1},
+{id: 276, trade: "Glaziers - Residences, offices and shops", rate: 21.4},
+{id: 277, trade: "Glaziers - Other risks", rate: 24.3},
+{id: 278, trade: "Gliding Association - Non flying employees", rate: 24.3},
+{id: 279, trade: "Godwons (See Warehouses)", rate: 99999},
+{id: 280, trade: "Gold and Silver Thread Lametta & Lace Mfgrs.", rate: 15.1},
+{id: 281, trade: "Golf Clubs (see Regulation No 8) - All employees incl. stewards servants and Caddies", rate: 5.85},
+{id: 282, trade: "Golf Clubs (see Regulation No 8) - Caddies only, per member on total membership (per Capita)", rate: 0.3},
+{id: 283, trade: "Golf Clubs (see Regulation No 8) - Individual players, against caddies risk on any links per players (per Capita)", rate: 3.7},
+{id: 284, trade: "Golf Clubs (see Regulation No 8) - Visitors liability in respect of caddies, per visitor (per Capita) (Minimum premium Rs. 10/-)", rate: 0.1},
+{id: 285, trade: "Grain - Elevator Employees", rate: 60.8},
+{id: 286, trade: "Grain - Corn, Flour, Hay, Straw, Fodder, Seed and Grain merchants and Forage Contractors - Where no mechanically driven machinery is used, excl. loading and discharging vessels and carting and delivery other than by hand or cart", rate: 18.5},
+{id: 287, trade: "Grain - Corn, Flour, Hay, Straw, Fodder, Seed and Grain merchants and Forage Contractors - Where machinery is used, excl. loading and discharging vessels and carting and delivery other than by hand or cart", rate: 21.4},
+{id: 288, trade: "Grain - All Employees engaged in loading and discharging vessels", rate: 97.3},
+{id: 289, trade: "Grain Godown and Warehouse Employees", rate: 24.3},
+{id: 290, trade: "Gramophone Record Makers", rate: 18.5},
+{id: 291, trade: "Grease Mfgrs.", rate: 12.15},
+{id: 292, trade: "Grindstone & Millstone Makers Not in Connection with quarries - Quarry risks to be rated as quarries", rate: 18.5},
+{id: 293, trade: "Groundnut Decorticating - All employees", rate: 12.15},
+{id: 294, trade: "Gun Makers - Excl. ordnance work - Workmen engaged in testing and catridge loading", rate: 48.65},
+{id: 295, trade: "Gun Makers - Excl. ordnance work - All other employees", rate: 15.1},
+{id: 296, trade: "Hackle Makers", rate: 18.5},
+{id: 297, trade: "Harness and Saddle Makers - Wood working machinists", rate: 30.15},
+{id: 298, trade: "Harness and Saddle Makers - All other employees", rate: 12.15},
+{id: 299, trade: "Hat and Topee Works - All descriptions incl. Ladies' Frames and Shapes", rate: 7.8},
+{id: 300, trade: "Heald and Reed Makers - Wood working machinists", rate: 30.15},
+{id: 301, trade: "Heald and Reed Makers - All other employees", rate: 7.8},
+{id: 302, trade: "Heat treatment shops (excl. Forging)", rate: 18.5},
+{id: 303, trade: "Hide and Skin Merchants and Dealers - Incl. Anthrax", rate: 36.5},
+{id: 304, trade: "Hide and Skin Merchants and Dealers - Excl. Anthrax", rate: 15.1},
+{id: 305, trade: "Hiking Clubs - Sherpas employed for carrying loads in the mountains: Wages upto 200/- P.M", rate: 60.8},
+{id: 306, trade: "Hiking Clubs - Sherpas employed for carrying loads in the mountains: Wages upto 300/- P.M.", rate: 72.95},
+{id: 307, trade: "Hiking Clubs - Sherpas employed for carrying loads in the mountains: Wages exceeding 300/- P.M.", rate: 97.3},
+{id: 308, trade: "Hollow Ware Mfgrs. (Metal) - Domestic - Utensils incl. stamping and enamelling", rate: 24.3},
+{id: 309, trade: "Horse Hair Mfgrs - Incl. Anthrax", rate: 24.3},
+{id: 310, trade: "Horse Hair Mfgrs - Excl. Anthrax", rate: 12.15},
+{id: 311, trade: "Horse Breeders Trainers and Jokeys", rate: 60.8},
+{id: 312, trade: "Hosiery Factories", rate: 5.85},
+{id: 313, trade: "Hospitals - Clerical and salaried office staff", rate: 2.45},
+{id: 314, trade: "Hospitals - Wood-working machinists", rate: 30.15},
+{id: 315, trade: "Hospitals - Nurses keepers and attendants on Lunatics", rate: 9.25},
+{id: 316, trade: "Hospitals - All other employees", rate: 5.85},
+{id: 317, trade: "Hospitals - All risks entailing the use of radium radio-active substances or X-ray apparatus must be submitted to the Committee for special rating", rate: 99999},
+{id: 318, trade: "Hotels - (Residential Commercial and Temperance) Hydropathic Establishments, boarding and lodging houses, residential Chambers, coffee tea and refreshment rooms and restaurants Excluding public houses, beer shops and taverns (see Regulation Nos. 7 and 8) Indoor", rate: 4.35},
+{id: 319, trade: "Hotels - (Residential Commercial and Temperance) Hydropathic Establishments, boarding and lodging houses, residential Chambers, coffee tea and refreshment rooms and restaurants Excluding public houses, beer shops and taverns (see Regulation Nos. 7 and 8) Outdoor and maintenance staff, incl. lift attendants", rate: 18.5},
+{id: 320, trade: "Hurricane Lantern Mfgrs", rate: 24.3},
+{id: 321, trade: "Ice Dealers and Mfgrs - Excluding Dry Ice Manufacturers (see Dry Ice Mfgrs)", rate: 24.3},
+{id: 322, trade: "Import and Export Merchants - Sircars Superintending only loading and unloading of freight - All employees", rate: 30.15},
+{id: 323, trade: "Ice Cream Mfgrs/-", rate: 12.15},
+{id: 324, trade: "India Rubber - (see Regulation No 12) Gutta percha, vulcanite and India rubber goods, belting ebonite, ebonestos and water proof material Mfgrs.", rate: 24.3},
+{id: 325, trade: "India Rubber - Water proof garment makers", rate: 5.85},
+{id: 326, trade: "India Rubber - Stamp makers", rate: 10.7},
+{id: 327, trade: "India Rubber - Tyre Mfgrs.", rate: 24.3},
+{id: 328, trade: "India Rubber - Waste workers and re-claimers", rate: 42.8},
+{id: 329, trade: "Indigo Mfgrs.", rate: 24.3},
+{id: 330, trade: "Inland Water Transport Companies", rate: 30.15},
+{id: 331, trade: "Ink Mfgrs.", rate: 5.85},
+{id: 332, trade: "Insurance Companies", rate: 2.9},
+{id: 333, trade: "Insecticides/Pesticide", rate: 30.15},
+{id: 334, trade: "Insecticides/Pesticide spraying -", rate: 24.3},
+{id: 335, trade: "Intra-uterine contraceptives devices Mfgrs.", rate: 5.85},
+{id: 336, trade: "Ivory, Bone and Tortoiseshell goods Makers, and Pearl cutters - Where the materials handled are solely ivory and/or tortoiseshell and/or pearl", rate: 18.5},
+{id: 337, trade: "Ivory, Bone and Tortoiseshell goods Makers, and Pearl cutters - Where the materials handled are not solely ivory and/or tortoiseshell and/or pearl", rate: 36.5},
+{id: 338, trade: "Jacquard Harness makers", rate: 18.5},
+{id: 339, trade: "Jam and provision preservers and packers", rate: 18.5},
+{id: 340, trade: "Jelly and Powder (table) Mfgrs", rate: 18.5},
+{id: 341, trade: "Jewelers, Goldsmith and Silversmith - Retail only", rate: 5.85},
+{id: 342, trade: "Jewelers, Goldsmith and Silversmith - Wholesale and Mfgr.", rate: 9.25},
+{id: 343, trade: "Jewelers, Goldsmith and Silversmith - Tower, Turret, and Railway Clock fixing, repairing and winding", rate: 48.65},
+{id: 344, trade: "Jute Bales Loading and unloading into Railway wagons", rate: 18.5},
+{id: 345, trade: "Jute Godowns and Warehouses - Handling Jute, loose and in pucca or kucha bales", rate: 9.25},
+{id: 346, trade: "Jute Mills - All processes incl. mill godowns", rate: 9.25},
+{id: 347, trade: "Jute Presses - All employees in pucca baling presses", rate: 18.5},
+{id: 348, trade: "Jute Presses - All employees in Kutcha baling presses", rate: 18.5},
+{id: 349, trade: "Lamp Makers - All descriptions incl. incandescent lamps", rate: 12.15},
+{id: 350, trade: "Land Drainage Service - Excl. blasting and tunnelling", rate: 30.15},
+{id: 351, trade: "Land Drainage Service - Incl. blasting and tunnelling", rate: 97.3},
+{id: 352, trade: "Lapidaries and precious stone cutters - Excl. Lead poisoning", rate: 7.8},
+{id: 353, trade: "Lapidaries and precious stone cutters - Incl. Lead poisoning", rate: 18.5},
+{id: 354, trade: "Laundries - Incl. receiving office employees - Where machinery is used", rate: 15.1},
+{id: 355, trade: "Laundries - Incl. receiving office employees - Where no machinery is used", rate: 5.85},
+{id: 356, trade: "Lead pencil Makers (see Regulation No. 13)", rate: 12.15},
+{id: 357, trade: "Lead smelters and/or extractors", rate: 60.8},
+{id: 358, trade: "Leather Dresser and Dyers", rate: 15.1},
+{id: 359, trade: "Leather Goods Mfgrs. - Excl. Belting", rate: 15.1},
+{id: 360, trade: "Leather Goods Mfgrs. - LGP Bottling Plant", rate: 30.15},
+{id: 361, trade: "Leather Goods Mfgrs. - Passengers Lift attendants in Offices, Residential Premises, Shops, Hospitals, Nursling Homes and Educational Institutions", rate: 9.25},
+{id: 362, trade: "Lift Repairing Machinists - (Upkeep of Insured 's own property only)", rate: 21.4},
+{id: 363, trade: "Lighthouse Keepers", rate: 145.9},
+{id: 364, trade: "Lime Works and Kilns - Excl. Quarry or Mining Risks", rate: 30.15},
+{id: 365, trade: "Linen Finishers", rate: 12.15},
+{id: 366, trade: "Liquified Petroleum Gas Dealers - All employees incl. those engaged in the delivery of Gas Cylinders by hand, handcart and mechanically propelled vehicles", rate: 12.15},
+{id: 367, trade: "Lock Makers", rate: 9.25},
+{id: 368, trade: "Live Stock Farm", rate: 15.1},
+{id: 369, trade: "Machinery and Metal - Buyers, salesmen and show room assistants", rate: 12.15},
+{id: 370, trade: "Machinery and Metal - Warehouse", rate: 24.3},
+{id: 371, trade: "Machinery and Metal - Second-hand Machinery and scrap Metal Dealers excl. dismantling breaking up and demolition", rate: 54.5},
+{id: 372, trade: "Maltsters", rate: 12.15},
+{id: 373, trade: "Manure and Fertiliser Mfgrs.", rate: 18.5},
+{id: 374, trade: "Marble and granite Works, Dressing and polishing, not in connection with Quarries", rate: 60.8},
+{id: 375, trade: "Margarine Mfgrs.", rate: 9.25},
+{id: 376, trade: "Match Mfgrs", rate: 24.3},
+{id: 377, trade: "Meat Market - Salesman only", rate: 5.85},
+{id: 378, trade: "Meat Market - Assistants, incl. cutting up", rate: 21.4},
+{id: 379, trade: "Meat Market - Porters", rate: 27.25},
+{id: 380, trade: "Messengers (Office) and Bill Collectors - Using Cycles", rate: 12.15},
+{id: 381, trade: "Messengers (Office) and Bill Collectors - Not Using Cycles", rate: 4.35},
+{id: 382, trade: "Metal Workers - Bell Founders", rate: 12.15},
+{id: 383, trade: "Metal Workers - Metal Spinners", rate: 15.1},
+{id: 384, trade: "Metal Workers - Metal Makers", rate: 12.15},
+{id: 385, trade: "Metal Workers - Pewterers", rate: 15.1},
+{id: 386, trade: "Metal Workers - Stereotypes", rate: 15.1},
+{id: 387, trade: "Metal Workers - Tin Refiners", rate: 12.15},
+{id: 388, trade: "Metal Workers - Typefounders", rate: 12.15},
+{id: 389, trade: "Maker of - Aeroplane small parts (Metal)", rate: 12.15},
+{id: 390, trade: "Maker of - Cotton Gin Machinery parts", rate: 18.5},
+{id: 391, trade: "Maker of - Electric Light Fittings", rate: 12.15},
+{id: 392, trade: "Maker of - Hinges", rate: 24.3},
+{id: 393, trade: "Maker of - Gas Fittings", rate: 12.15},
+{id: 394, trade: "Maker of - German Silver, Solder, and Spelter Goods", rate: 12.15},
+{id: 395, trade: "Maker of - Vehicle small parts (metal)", rate: 15.1},
+{id: 396, trade: "Maker of -Valves", rate: 12.15},
+{id: 397, trade: "Maker of - Water fitting (excl. Meters)", rate: 12.15},
+{id: 398, trade: "Maker of - Flexible Metallic Tubing", rate: 12.15},
+{id: 399, trade: "Metal Workers - Workers in Zinc, not smelting or rolling - Where no work away from the shop or yard is done", rate: 15.1},
+{id: 400, trade: "Metal Workers - Workers in Zinc, not smelting or rolling - Where any work away from the shop or yard is done", rate: 18.5},
+{id: 401, trade: "Mechanical Appliances Like Tractors, Harvesters and Ploughers etc.", rate: 36.5},
+{id: 402, trade: "Mica Cutters", rate: 9.25},
+{id: 403, trade: "Milk Mfgrs. Condensed and Sterilised", rate: 27.25},
+{id: 404, trade: "Mines - Asbestos (open cast)", rate: 42.8},
+{id: 405, trade: "Mines - Barytes", rate: 36.5},
+{id: 406, trade: "Mines - Chromite", rate: 54.5},
+{id: 407, trade: "Mines - Copper", rate: 48.65},
+{id: 408, trade: "Mines - Gold", rate: 97.3},
+{id: 409, trade: "Mines - Graphite", rate: 42.8},
+{id: 410, trade: "Mines - Iron Ore", rate: 97.3},
+{id: 411, trade: "Mines - Lead", rate: 48.65},
+{id: 412, trade: "Mines - Manganese", rate: 54.5},
+{id: 413, trade: "Mines - Mica", rate: 42.8},
+{id: 414, trade: "Mines - Ochre", rate: 42.8},
+{id: 415, trade: "Mines - Salt", rate: 42.8},
+{id: 416, trade: "Mines - Silver", rate: 48.65},
+{id: 417, trade: "Mines - Tin", rate: 48.65},
+{id: 418, trade: "Mines - Wolfram", rate: 48.65},
+{id: 419, trade: "Motor Cycle and Cycle Patrols (Automobile Association or Clubs) - All Employees", rate: 42.8},
+{id: 420, trade: "Motor Cycle and Cycle Patrols (Automobile Association or Clubs) - Motor Race Drivers per car per race", rate: 121.6},
+{id: 421, trade: "Motor Garages, Showrooms and Assemblers of Motor Vehicles - Woodworking machinists", rate: 30.15},
+{id: 422, trade: "Motor Garages, Showrooms and Assemblers of Motor Vehicles - All other employees incl. salesman drivers all mechanics", rate: 15.1},
+{id: 423, trade: "Motor Tractors Owners - (Land cultivation only)", rate: 36.5},
+{id: 424, trade: "Motor Tractors Owners - Myrobalan Extract Manufacturing", rate: 15.1},
+{id: 425, trade: "Nail Makers - Where no mechanically is used", rate: 18.5},
+{id: 426, trade: "Nail Makers - Where machinery is used", rate: 24.3},
+{id: 427, trade: "Nurse - Not attending on lunatics", rate: 5.85},
+{id: 428, trade: "Nurse - Attending on lunatics", rate: 9.25},
+{id: 429, trade: "Nut and Bolt Makers (Iron and Steel) - Where no mechanically driven machinery is used", rate: 18.5},
+{id: 430, trade: "Nut and Bolt Makers (Iron and Steel) - Where machinery is used", rate: 24.3},
+{id: 431, trade: "Oakum Mfgrs.", rate: 12.15},
+{id: 432, trade: "Oil Companies, importing in bulk for retail Distribution - All employees", rate: 12.15},
+{id: 433, trade: "Oil Mills (not mineral oils) and Oilcake Mfgrs", rate: 36.5},
+{id: 434, trade: "Oil skin and Tarpaulin Mfgrs", rate: 12.15},
+{id: 435, trade: "Oil Well Proprietors and Mineral Oil Refiners - Employees engaged in drilling and pumping erection, repair and demolition of riggs telegraph or telephone lines or overhead electric cable", rate: 97.3},
+{id: 436, trade: "Oil Well Proprietors and Mineral Oil Refiners - All other employees", rate: 30.15},
+{id: 437, trade: "Omnibus and Motor Bus Proprietors", rate: 24.3},
+{id: 438, trade: "Open Cast Coal-Getting (incl. use of explosives)", rate: 68.1},
+{id: 439, trade: "Ore Importers and Exporters where carried on as a separate trade incl. Godown and Loading and Unloading Vessels", rate: 97.3},
+{id: 440, trade: "Oyster Cultivators", rate: 36.5},
+{id: 441, trade: "Oil expeller and oil expeller spare parts mfgrs.", rate: 27.25},
+{id: 442, trade: "Paint Colour and Enamal Mfgrs - Where no red or white lead manufactured", rate: 12.15},
+{id: 443, trade: "Paint Colour and Enamal Mfgrs - Where red or white lead manufactured", rate: 18.5},
+{id: 444, trade: "Painters and Decorators where carried on as separate trade, not Builders - All risks incl. ship painters, scrapers and scalers", rate: 145.9},
+{id: 445, trade: "Painters and Decorators where carried on as separate trade, not Builders - Excl. churches, chapals, cinemas, theaters, music halls, public halls, gtasometers towers, bridges, viaducts or blast furnaces, the painting, scraping or scaling of ships of any work in connection with the roofs of railway stations or railway platform awnings", rate: 60.8},
+{id: 446, trade: "Palm Trees - Tapping or Picking", rate: 48.65},
+{id: 447, trade: "Paper Mfgrs - Hand made only", rate: 12.15},
+{id: 448, trade: "Paper Mfgrs - Machine made", rate: 30.15},
+{id: 449, trade: "Paper Mfgrs - Waxed Paper", rate: 18.5},
+{id: 450, trade: "Paper Patern Makers", rate: 12.15},
+{id: 451, trade: "Paper Waxing (where carried on as a separate Trade)", rate: 18.5},
+{id: 452, trade: "Paper Mache Decorators - Inside work only", rate: 15.1},
+{id: 453, trade: "Parcel Delivery Agents, Carriers & Carters", rate: 36.5},
+{id: 454, trade: "Parquet Floor Cutting - Wood work machinists", rate: 30.15},
+{id: 455, trade: "Parquet Floor Cutting - All other employees", rate: 12.15},
+{id: 456, trade: "Parquet Floor Laying", rate: 24.3},
+{id: 457, trade: "Patent Fuel and Firelighter Mfgrs.", rate: 97.3},
+{id: 458, trade: "Patent Card Makers", rate: 12.15},
+{id: 459, trade: "Perfume Mfgrs.", rate: 12.15},
+{id: 460, trade: "Pest Control and Fumigation", rate: 24.3},
+{id: 461, trade: "Petro Pump Stations - (Not connected with garages) Delivery (see Classification 596a and 596b) All other Works", rate: 12.15},
+{id: 462, trade: "Petrochemical Industry", rate: 30.15},
+{id: 463, trade: "Photo Block and Process Block Mfgrs.", rate: 9.25},
+{id: 464, trade: "Photographers and Photographic Appliances Dealers - Shop and studio", rate: 7.8},
+{id: 465, trade: "Photographers and Photographic Appliances Dealers - Operators and assistants engaged partly or wholly outside", rate: 12.15},
+{id: 466, trade: "Picture & Picture Frame Makers, Dealers and Gilders - Retail Shop risk", rate: 12.15},
+{id: 467, trade: "Picture & Picture Frame Makers, Dealers and Gilders - Wood work machinists", rate: 30.15},
+{id: 468, trade: "Picture & Picture Frame Makers, Dealers and Gilders - All other employees", rate: 12.15},
+{id: 469, trade: "Picture Frame Moulding Makers - Wood working machinists", rate: 30.15},
+{id: 470, trade: "Picture Frame Moulding Makers - All other employees", rate: 15.15},
+{id: 471, trade: "Pile Drivers - Where carried on as a separate trade", rate: 54.7},
+{id: 472, trade: "Pit Prop cutting where carried on as a separate Trade", rate: 48.65},
+{id: 473, trade: "Planing and Moulding Mills", rate: 48.65},
+{id: 474, trade: "Plasterers and Plaster and Fibrous Plaster Modellers and Moulders where carried on separate Trade - All Risks", rate: 97.3},
+{id: 475, trade: "Plasterers and Plaster and Fibrous Plaster Modellers and Moulders where carried on separate Trade - Excl. churches, chapals, cinemas, exhibitions, music halls, public halls and theaters", rate: 30.15},
+{id: 476, trade: "Plastic Goods Mfgrs.", rate: 16.5},
+{id: 477, trade: "Plumber, Hotwater and Sanitary Engineers where carried on as separate Trade - Retail Shop risk", rate: 9.25},
+{id: 478, trade: "Plumber, Hotwater and Sanitary Engineers where carried on as separate Trade - Mechanics - Excl. well sinking and any work in any connection with wells exceeding 6 meters", rate: 15.1},
+{id: 479, trade: "Plumber, Hotwater and Sanitary Engineers where carried on as separate Trade - Mechanics - Work connection with wells exceeding 6 meters in depth but excl. Sinking", rate: 48.65},
+{id: 480, trade: "Plumber, Hotwater and Sanitary Engineers where carried on as separate Trade - Mechanics - Ship furnishing", rate: 18.5},
+{id: 481, trade: "Plumber, Hotwater and Sanitary Engineers where carried on as separate Trade - Mechanics - Well sinking (other than artesian and tube wells q.v.)", rate: 121.6},
+{id: 482, trade: "Polo Clubs - Stable hands and employees engaged in ridding", rate: 60.8},
+{id: 483, trade: "Polo Clubs - All other employees", rate: 15.1},
+{id: 484, trade: "Porters (Station) for carrying passengers' luggage per Capita", rate: 4.9},
+{id: 485, trade: "Potato Dehydrating - Where no mechanically driven machinery is used", rate: 9.25},
+{id: 486, trade: "Potato Dehydrating - Where mechanically driven machinery is used", rate: 18.5},
+{id: 487, trade: "Potteries and Pottery Decorators - (a) Excl. Manufacture of Flooring, Roofing and Terakotta Tiles; Excl. Clay getting and Mining also excl. Lead Poisoning", rate: 12.15},
+{id: 488, trade: "Potteries and Pottery Decorators - (b)  Incl. Lead poisoning - above rate plus", rate: 36.5},
+{id: 489, trade: "Potteries and Pottery Decorators - (c)  Tile Mfgrs., i.e. rough unglazed tiled for flooring and roofing and terakotta tiles- rate as bricks and tile makers", rate: 48.65},
+{id: 490, trade: "Potteries and Pottery Decorators - (d) Clay-getting excl. work below 6 meters (fireclay mining - rate as collieries)", rate: 24.3},
+{id: 491, trade: "Potteries and Pottery Decorators - (e) Clay-getting below 6 meters excl. pit or mine", rate: 42.8},
+{id: 492, trade: "Poultry and Hatchery - Where no electrical appliances are involved", rate: 3.05},
+{id: 493, trade: "Poultry and Hatchery - Where electrical appliances are used", rate: 6.1},
+{id: 494, trade: "Printers and Lithographers (Excl. paper mfgrs.) - Excl. printing of daily news papers excel. lead poisoning", rate: 5.85},
+{id: 495, trade: "Printers and Lithographers (Excl. paper mfgrs.) - Printing of daily news papers excl. lead poisoning", rate: 9.25},
+{id: 496, trade: "Printers and Lithographers (Excl. paper mfgrs.) - Incl. lead poisoning - above rates plus", rate: 36.5},
+{id: 497, trade: "Quarries - Where no blasting is done", rate: 30.15},
+{id: 498, trade: "Quarries - Where any blasting is done", rate: 97.3},
+{id: 499, trade: "Racecourse Employees - Grooms, Jockeys and Stable hands", rate: 60.8},
+{id: 500, trade: "Racecourse Employees - All other employees", rate: 12.15},
+{id: 501, trade: "Radium - All risks entailing the use of radium and radio active Substances must be submitted to the committee for special rating", rate: 99999},
+{id: 502, trade: "Rag and Waste Dealers, Rag Pickers and Marine Store Dealers - Breaking up, dismantling and demolition", rate: 170.25},
+{id: 503, trade: "Rag and Waste Dealers, Rag Pickers and Marine Store Dealers - All employees in loading and discharging vessels", rate: 97.3},
+{id: 504, trade: "Rag and Waste Dealers, Rag Pickers and Marine Store Dealers - All other employees", rate: 36.5},
+{id: 505, trade: "Railway Coach and Wagon Works", rate: 42.8},
+{id: 506, trade: "Railway Construction and alteration - Excl. blasting and tunnelling", rate: 36.5},
+{id: 507, trade: "Railway Construction and alteration - Incl. blasting and tunnelling", rate: 72.95},
+{id: 508, trade: "Railway Construction and alteration - Tunnelling, incl. Blasting (when carried as a separate Contract)", rate: 97.3},
+{id: 509, trade: "Railway up-keep and Running - Excl. Construction - Light Railways for passengers only", rate: 12.15},
+{id: 510, trade: "Railway up-keep and Running - Excl. Construction - Light Railways for goods and passengers", rate: 15.1},
+{id: 511, trade: "Railway up-keep and Running - Excl. Construction - Electric Railways", rate: 24.3},
+{id: 512, trade: "Railway up-keep and Running - Excl. Construction - Other Railways", rate: 24.3},
+{id: 513, trade: "Railway up-keep and Running - Excl. Construction - Labour employed in loading and unloading wagons", rate: 30.15},
+{id: 514, trade: "Railway Station Refreshment Rooms' Private Contractor Controlling - Employees who travel regularly by train i.e. ice and dining car attendants", rate: 54.5},
+{id: 515, trade: "Railway Station Refreshment Rooms' Private Contractor Controlling - Waiters who serve meals in refreshment rooms and to passengers in trains, i.e. chota hazri and tea who will occasionally travel short distance by train.", rate: 18.5},
+{id: 516, trade: "Railway Station Refreshment Rooms' Private Contractor Controlling - Butlers, cooks and waiters who are always employed in the refreshment room and never travel by train", rate: 4.35},
+{id: 517, trade: "Rayon Mills", rate: 7.8},
+{id: 518, trade: "Refuse Heaps - Getting material from", rate: 42.8},
+{id: 519, trade: "Refuse Heaps - Remound depots", rate: 72.95},
+{id: 520, trade: "Resin mfgrs.", rate: 36.5},
+{id: 521, trade: "Rice Millers - All other employees", rate: 15.1},
+{id: 522, trade: "Rifle Clubs - All other employees incl. makers, instructors and care takers", rate: 30.15},
+{id: 523, trade: "Rivet Makers - Making copper rivet for tin work", rate: 12.15},
+{id: 524, trade: "Rivet Makers - All other employees", rate: 24.3},
+{id: 525, trade: "Road Paving, Tarring and Road Making", rate: 30.15},
+{id: 526, trade: "Roofing and Flooring Makers and/or Layers (not slaters or tilers) Hands in shop or yard - Wood working machinists", rate: 30.15},
+{id: 527, trade: "Roofing and Flooring Makers and/or Layers (not slaters or tilers) Hands in shop or yard - All other employees", rate: 18.5},
+{id: 528, trade: "Rope (Excl. Wire Rope) Cord and Twine - Where no mechanically driven machinery is used", rate: 12.15},
+{id: 529, trade: "Rope (Excl. Wire Rope) Cord and Twine - Where any mechanically driven machinery is used", rate: 24.3},
+{id: 530, trade: "Rope (Excl. Wire Rope) Cord and Twine - Cotton yarn only - Where no mechanically driven machinery is used excl. repairing and spinning", rate: 7.8},
+{id: 531, trade: "Rope (Excl. Wire Rope) Cord and Twine - Cotton yarn only - Where any mechanically driven machinery is used excl. repairing and spinning", rate: 18.5},
+{id: 532, trade: "Rubber Factories (See India Rubber)", rate: 99999},
+{id: 533, trade: "Rubber Plantations - Domestic servants whose names appears on the factory or garden register and who are paid wholly by the estate", rate: 2.9},
+{id: 534, trade: "Rubber Plantations - All other employees", rate: 2.9},
+{id: 535, trade: "Sack Makers ( Sewing only when carried on as a separate trade)-", rate: 10.7},
+{id: 536, trade: "Safety Razor Blades Mfgrs.", rate: 12.15},
+{id: 537, trade: "Sail Makers only - excl. Riggers", rate: 10.7},
+{id: 538, trade: "Sail Makers - Riggers", rate: 97.3},
+{id: 539, trade: "Salt Merchants and Dealers - Hands in Warehouse receiving and delivering from or to vessels. and/or no Dock, Quayside or wharf and lightermen (excl. Stevedores)", rate: 72.95},
+{id: 540, trade: "Salt Merchants and Dealers - All other Employees", rate: 18.15},
+{id: 541, trade: "Salt Works - Excl. Mining", rate: 24.3},
+{id: 542, trade: "Salvage Corps - Employees solely engaged upon premises of the crops in handling and treating salvaged goods", rate: 30.15},
+{id: 543, trade: "Salvage Corps - All other employees", rate: 30.15},
+{id: 544, trade: "Sand - Removal sea by dredgers - All employees", rate: 97.3},
+{id: 545, trade: "Sauce Mfgrs.", rate: 18.5},
+{id: 546, trade: "Sausage & Sausage skin Mfgrs.", rate: 21.4},
+{id: 547, trade: "Saw Mill and Timber Merchants - All Employees", rate: 30.15},
+{id: 548, trade: "Screw Mfgrs.", rate: 12.15},
+{id: 549, trade: "Sewer and Road Contractors - Open trench work only where no blasting and tunnelling is done and where the depth in no part exceeds 3 meters", rate: 30.15},
+{id: 550, trade: "Sewer and Road Contractors - Open trench work only where no blasting and tunnelling is done and where the depth in no part exceeds 3 meters", rate: 36.5},
+{id: 551, trade: "Sewer and Road Contractors - All risks where and /or blasting and tunnelling is done", rate: 72.95},
+{id: 552, trade: "Sewing Machine Makers. Fitters and Repairers", rate: 15.1},
+{id: 553, trade: "Sheet Lead Rollers and Lead Pipe Makers - Excl. Lead poisoning", rate: 48.65},
+{id: 554, trade: "Sheet Lead Rollers and Lead Pipe Makers - Incl. Lead poisoning", rate: 60.8},
+{id: 555, trade: "Shellac Mfgrs.", rate: 21.4},
+{id: 556, trade: "Ship Breakers", rate: 97.3},
+{id: 557, trade: "Ship Builders, Iron, Steel and Concrete - Where barges hoppers, dredgers, tugs, yatches, passengers and cargo vessels pilot boats not exceeding 1000 tons gross measurement are built", rate: 30.15},
+{id: 558, trade: "Ship Builders, Iron, Steel and Concrete - Where barges hoppers, dredgers, tugs, yatches, passengers and cargo vessels pilot boats not exceeding 1000 tons gross measurement are built - Where such vessels are repaired only", rate: 42.8},
+{id: 559, trade: "Ship Builders, Iron, Steel and Concrete - Where torpedo boats destroyers, steam trawlers and shallow draught river gunboats not exceeding 500 tons displacement and similar vessels as in class (a) over 1000 tons but not exceeding 2000 tons gross measurement are built", rate: 36.5},
+{id: 560, trade: "Ship Builders, Iron, Steel and Concrete - Where torpedo boats destroyers, steam trawlers and shallow draught river gunboats not exceeding 500 tons displacement and similar vessels as in class (a) over 1000 tons but not exceeding 2000 tons gross measurement are built - Where such vessels are repaired only", rate: 54.5},
+{id: 561, trade: "Ship Builders, Iron, Steel and Concrete - Where war ship, passenger, cargo and other vessels not incl. in (a) or (b) are built", rate: 42.8},
+{id: 562, trade: "Ship Builders, Iron, Steel and Concrete - Where war ship, passenger, cargo and other vessels not incl. in (a) or (b) are built - Where such vessels are repaired only", rate: 54.5},
+{id: 563, trade: "Ship Builders, Iron, Steel and Concrete - Pontoon Builders and repairers", rate: 72.95},
+{id: 564, trade: "Ship Chandlers and Ship Stores - Fixing and rigging", rate: 97.3},
+{id: 565, trade: "Ship Chandlers and Ship Stores - All other employees", rate: 18.5},
+{id: 566, trade: "Ship Painters Exclusively engaged in Painting Vessels- Without the use of stagings or slings", rate: 60.8},
+{id: 567, trade: "Shipsmiths (jobbing) where carried on as a separate trade", rate: 48.65},
+{id: 568, trade: "Shipwrights (jobbing) where carried on as a separate trade", rate: 109.45},
+{id: 569, trade: "Shop Fitters - Wood working machinists", rate: 30.15},
+{id: 570, trade: "Shop Fitters - All other employees", rate: 24.3},
+{id: 571, trade: "Shop risk Class A - Art, bric-a-brac and curio and art needle works", rate: 4.9},
+{id: 572, trade: "Shop risk Class A - Bakers", rate: 4.9},
+{id: 573, trade: "Shop risk Class A - Biscuits", rate: 4.9},
+{id: 574, trade: "Shop risk Class A - Book", rate: 4.9},
+{id: 575, trade: "Shop risk Class A - Boot and shoe, excl. makers and repairs", rate: 4.9},
+{id: 576, trade: "Shop risk Class A - Chemists", rate: 4.9},
+{id: 577, trade: "Shop risk Class A - China and glass", rate: 4.9},
+{id: 578, trade: "Shop risk Class A - Cutlery Diaries", rate: 4.9},
+{id: 579, trade: "Shop risk Class A - Drapers", rate: 4.9},
+{id: 580, trade: "Shop risk Class A - Dress Maskers", rate: 4.9},
+{id: 581, trade: "Shop risk Class A - Fancy goods", rate: 4.9},
+{id: 582, trade: "Shop risk Class A - Furriers", rate: 4.9},
+{id: 583, trade: "Shop risk Class A - Haberdashers", rate: 4.9},
+{id: 584, trade: "Shop risk Class A - Hatters", rate: 4.9},
+{id: 585, trade: "Shop risk Class A - Hoosiers", rate: 4.9},
+{id: 586, trade: "Shop risk Class A - Leather Goods", rate: 4.9},
+{id: 587, trade: "Shop risk Class A - Milliners", rate: 4.9},
+{id: 588, trade: "Shop risk Class A - Wholesale", rate: 4.9},
+{id: 589, trade: "Shop risk Class A - Musical instruments (Salesmen only)", rate: 4.9},
+{id: 590, trade: "Shop risk Class A - Naturalists not taxidermists", rate: 4.9},
+{id: 591, trade: "Shop risk Class A - instruments and appliances", rate: 4.9},
+{id: 592, trade: "Shop risk Class A - Newsagents", rate: 4.9},
+{id: 593, trade: "Shop risk Class A - Opticians", rate: 4.9},
+{id: 594, trade: "Shop risk Class A - Photographic Records", rate: 4.9},
+{id: 595, trade: "Shop risk Class A - Photographic appliances", rate: 4.9},
+{id: 596, trade: "Shop risk Class A - Photographers", rate: 4.9},
+{id: 597, trade: "Shop risk Class A - Stationers", rate: 4.9},
+{id: 598, trade: "Shop risk Class A - Surgical instrument and appliances", rate: 4.9},
+{id: 599, trade: "Shop risk Class A - Tailors, Clothiers and outfitters", rate: 4.9},
+{id: 600, trade: "Shop risk Class A - Toys", rate: 4.9},
+{id: 601, trade: "Shop risk Class A - Tobacconists", rate: 4.9},
+{id: 602, trade: "Shop risk Class A - Wall papers", rate: 4.9},
+{id: 603, trade: "Shop risk Class A - Watch Makers", rate: 4.9},
+{id: 604, trade: "Shop risk Class B - Fruiterers", rate: 7.8},
+{id: 605, trade: "Shop risk Class B - Greengrocers", rate: 7.8},
+{id: 606, trade: "Shop risk Class B - Groceries and provisions - no licence and no machinery All other employees", rate: 7.8},
+{id: 607, trade: "Shop risk Class B - Ironmongers excl. Mechanics", rate: 7.8},
+{id: 608, trade: "Shop risk Class B - Italian warehouse men", rate: 7.8},
+{id: 609, trade: "Shop risk Class B - Oil and colour", rate: 7.8},
+{id: 610, trade: "Shop risk Class B - Sticks and umbrellas, incl. Finishing mounting and Repairing", rate: 7.8},
+{id: 611, trade: "Shop risk Class C - Chandlers (not ship chandlers)", rate: 9.25},
+{id: 612, trade: "Shop risk Class C - Cheesemongers", rate: 9.25},
+{id: 613, trade: "Shop risk Class C - Cooked Meat or cooked fish", rate: 9.25},
+{id: 614, trade: "Shop risk Class C - Corn Chandlers, Dealers and Merchants retail only - Using no machinery driven by mechanical power and excl. Delivery", rate: 9.25},
+{id: 615, trade: "Shop risk Class C - Corn Chandlers, Dealers and Merchants retail only - Using machinery but excl. delivery", rate: 12.15},
+{id: 616, trade: "Shop risk Class C - Furniture Electrical items excl. delivery by hand, handcraft and otherwise", rate: 9.25},
+{id: 617, trade: "Shop risk Class C - Grocery and provisions - Off licence where no bottling buy machinery is done- All other employees", rate: 9.25},
+{id: 618, trade: "Shop risk Class C - Hair Dressers", rate: 9.25},
+{id: 619, trade: "Shop risk Class C - Pawnbrokers", rate: 9.25},
+{id: 620, trade: "Shop risk Class C - Perambulators", rate: 9.25},
+{id: 621, trade: "Shop risk Class C - Picture and Picture Frame Dealers excl. Machinery", rate: 9.25},
+{id: 622, trade: "Shop risk Class C - Sewing and Washing machines", rate: 9.25},
+{id: 623, trade: "Shop risk Class C - Wine, spirit and beer dealers", rate: 9.25},
+{id: 624, trade: "Shop risk Class C - Off licence where no bottling by machinery is done - All other employees", rate: 9.25},
+{id: 625, trade: "Shop risk Class D - Groceries Provisions - Off licence where bottling by machinery is done - All other employees", rate: 12.15},
+{id: 626, trade: "Shop risk Class D - Gunsmiths", rate: 12.15},
+{id: 627, trade: "Shop risk Class D - Wine Spirit and Beer dealers - Off licence only where bottling by machinery is done - All other Employees", rate: 12.15},
+{id: 628, trade: "Shop risk Class E - Butchers", rate: 18.5},
+{id: 629, trade: "Shop risk Class E - Fishmongers", rate: 18.5},
+{id: 630, trade: "Shop risk Class E - Furniture removers (see Classification No 175)", rate: 99999},
+{id: 631, trade: "Shop risk Class E - Groceries and Provisions - (Full licence) - All employees engaged partially or wholly in serving drink", rate: 18.5},
+{id: 632, trade: "Shop risk Class E - Groceries and Provisions - (Full licence) - All other employees where no bottling by machinery is done excl. delivery by hand or otherwise", rate: 9.25},
+{id: 633, trade: "Shop risk Class E - Groceries and Provisions - (Full licence) - All other employees where bottling by machinery is done excl. delivery by hand or otherwise", rate: 10.7},
+{id: 634, trade: "Shop risk Class E - Poulterers", rate: 18.5},
+{id: 635, trade: "Shop risk Class E - Publicans", rate: 18.5},
+{id: 636, trade: "Shop risk Class E - Wine Spirit & Beer dealers - Full Licence - All employees", rate: 18.5},
+{id: 637, trade: "Short Mfgrs.", rate: 24.3},
+{id: 638, trade: "Sign Writers - Not glass - Excl. Erection", rate: 15.1},
+{id: 639, trade: "Sign Writers - Incl. Erection", rate: 36.5},
+{id: 640, trade: "Silk artificial - Yarn Production", rate: 12.15},
+{id: 641, trade: "Silk artificial - Weaving and process subsequent to yarn production", rate: 7.8},
+{id: 642, trade: "Silk artificial - Doubling", rate: 5.85},
+{id: 643, trade: "Silk artificial - All Processes", rate: 18.5},
+{id: 644, trade: "Silk artificial - Winding (as separate trade)", rate: 4.35},
+{id: 645, trade: "Silk Spinners and/or weavers", rate: 7.8},
+{id: 646, trade: "Sinking - Pit or Mine opening up or driving levels or slants", rate: 170.25},
+{id: 647, trade: "Slag Crushers and Removers", rate: 60.8},
+{id: 648, trade: "Slaters and Tilers (Roofs) where carried on as a separate trade - Work on roof; not exceeding 9 meters in height", rate: 36.5},
+{id: 649, trade: "Slaters and Tilers (Roofs) where carried on as a separate trade - Exceeding 9 meters in height", rate: 60.8},
+{id: 650, trade: "Slaughtermen", rate: 48.65},
+{id: 651, trade: "Small Arm Factories - Excl. testing and cartridge loading", rate: 15.1},
+{id: 652, trade: "Small Arm Factories - Testing and cartridge loading", rate: 48.65},
+{id: 653, trade: "Small Arm Factories - Small Wear Mfgrs. ( Braid, Laces other Leather, Tassels & Cords)", rate: 9.25},
+{id: 654, trade: "Small Arm Factories - Snuff Manufacturing Factories - All other employees", rate: 18.5},
+{id: 655, trade: "Small Arm Factories - Soap Makers, melters and boilers", rate: 24.3},
+{id: 656, trade: "Small Arm Factories - Soap Makers, (toilet) where remelting and perfuming only are done", rate: 9.25},
+{id: 657, trade: "Solvent Extraction Plants - Automatic", rate: 48.65},
+{id: 658, trade: "Solvent Extraction Plants - Non-automatic or batch type", rate: 60.8},
+{id: 659, trade: "Spice Mfgrs. - Incl. nut grinding and shelling", rate: 18.5},
+{id: 660, trade: "Spice Mfgrs. - Spring and Axle makers", rate: 15.1},
+{id: 661, trade: "Stampers and piercers - Where carried on as a separate trade", rate: 30.15},
+{id: 662, trade: "Starch and Blue Mfgrs.", rate: 30.15},
+{id: 663, trade: "Stationers - Retail shop risk", rate: 5.85},
+{id: 664, trade: "Stationers - Manufacturing and/or wholesale", rate: 12.15},
+{id: 665, trade: "Steel or Iron Founders - Where the heaviest casting does not exceed 1 ton", rate: 30.15},
+{id: 666, trade: "Steel or Iron Founders - Where the heaviest casting exceeds 1 ton", rate: 42.8},
+{id: 667, trade: "Steel or Iron Rolling Mills", rate: 48.65},
+{id: 668, trade: "Steel work (Steel Making )", rate: 48.65},
+{id: 669, trade: "Stevedors loading or unloading Cargo or Coal", rate: 97.3},
+{id: 670, trade: "Stone and dressing and stone breaking Yards - All employees Whose duties take them at any time to quarry where blasting is done", rate: 97.3},
+{id: 671, trade: "Stone and dressing and stone breaking Yards - All other employees", rate: 60.8},
+{id: 672, trade: "Sugar cane Plantation", rate: 5.85},
+{id: 673, trade: "Sugar, Saccharine and Glucose Refiners and/or Mfgrs. incl. sugarcane crushing Factories engaged in preparing Jagree", rate: 18.5},
+{id: 674, trade: "Sugar Sweet mfgrs.", rate: 15.1},
+{id: 675, trade: "Tally Clerks", rate: 14.6},
+{id: 676, trade: "Tanners, Carriers and Fellomongers", rate: 12.15},
+{id: 677, trade: "Tar Spraying Roads", rate: 30.15},
+{id: 678, trade: "Taxidermists - Excl. Anthrax", rate: 24.3},
+{id: 679, trade: "Taxidermists - Incl. Anthrax", rate: 36.5},
+{id: 680, trade: "Tea Gardens", rate: 2.45},
+{id: 681, trade: "Tea Gardens - Domestic servants on Tea-Estate - Servants (excl. private motor car drivers, attendants and/or cleaners) whose names appear on the factory or garden register and whih are paid wholly by the estate", rate: 2.45},
+{id: 682, trade: "Tea Packing Factories - Wood working machinists", rate: 30.15},
+{id: 683, trade: "Tea Packing Factories - All other employees", rate: 9.25},
+{id: 684, trade: "Tea Packing Factories - Telephone Operators", rate: 5.85},
+{id: 685, trade: "Tea Packing Factories - Tent and Marque Makers", rate: 15.1},
+{id: 686, trade: "Tea Packing Factories - Erecting only", rate: 48.65},
+{id: 687, trade: "Thatchers of Buildings", rate: 36.5},
+{id: 688, trade: "Theater Artists Bandsmen and Permanent Staff", rate: 12.15},
+{id: 689, trade: "Tilers (not roofing) and Mosaic and Tressellated Pavers Floor and, excl. clay getting", rate: 15.1},
+{id: 690, trade: "Timber Raftmen", rate: 91.45},
+{id: 691, trade: "Tin Dredgers", rate: 24.3},
+{id: 692, trade: "Tin & Steel and Steel Metal Workers (incl. metal boxes and drums) - Where no mechanically driven machinery is used (incl. Smelting)", rate: 18.5},
+{id: 693, trade: "Tin & Steel and Steel Metal Workers (incl. metal boxes and drums) - Where any mechanically driven machinery is used", rate: 27.25},
+{id: 694, trade: "The Ore Getting from open Workings and Machine Crushing", rate: 60.8},
+{id: 695, trade: "Tin Ore Getting from open Workings where no Machinery is used", rate: 30.15},
+{id: 696, trade: "Transmiths - Excl. Ship work", rate: 30.15},
+{id: 697, trade: "Transmiths - Ship work", rate: 24.3},
+{id: 698, trade: "Tobacco, Cigar and Cigarette and Bidi Mfgrs. and Dealers - Retailed shop risk", rate: 7.8},
+{id: 699, trade: "Tobacco, Cigar and Cigarette and Bidi Mfgrs. and Dealers - Godwon", rate: 5.85},
+{id: 700, trade: "Tobacco, Cigar and Cigarette and Bidi Mfgrs. and Dealers Manufacturing - Where no mechanically driven machinery is used", rate: 7.8},
+{id: 701, trade: "Tobacco, Cigar and Cigarette and Bidi Mfgrs. and Dealers Manufacturing - Where any mechanically driven machinery is used", rate: 7.8},
+{id: 702, trade: "Tools and Machine Tools Mfgrs. - Machine tools other than wood-working machinery", rate: 24.3},
+{id: 703, trade: "Tools and Machine Tools Mfgrs. - Wood working machinery", rate: 27.25},
+{id: 704, trade: "Tools and Machine Tools Mfgrs. - Tools for use in machine tools", rate: 15.1},
+{id: 705, trade: "Tools and Machine Tools Mfgrs. - All other tools incl. garden tools", rate: 12.15},
+{id: 706, trade: "Toy Makers - Mfg. of all classes of toys incl. celluloid toys", rate: 54.5},
+{id: 707, trade: "Toy Makers - Mfg. of all classes of toys excl. celluloid toys", rate: 27.25},
+{id: 708, trade: "Toy Makers - Mfg. of all classes of toys excl. celluloid toys and excl. the use of machinery", rate: 15.1},
+{id: 709, trade: "Tramway Construction - Incl. all incidental work on through-fares or elesewhere", rate: 60.8},
+{id: 710, trade: "Tramway upkeep and running", rate: 36.5},
+{id: 711, trade: "Tube Drawers", rate: 12.15},
+{id: 712, trade: "Tug Owners - Where carried on as a separate trade", rate: 54.5},
+{id: 713, trade: "Tunnelling incl. Blasting (when carried on as a separate trade)", rate: 97.3},
+{id: 714, trade: "T.V. Picture Tube Mfgrs", rate: 15.1},
+{id: 715, trade: "Typwriting Machine Makers, Dealers and Repairers and Typewriting Suppliers - Retail shop risk", rate: 7.8},
+{id: 716, trade: "Typwriting Machine Makers, Dealers and Repairers and Typewriting Suppliers - All other employees", rate: 12.15},
+{id: 717, trade: "Tyre Retreading and Resolving", rate: 18.5},
+{id: 718, trade: "Tyre Vulcanisers when carried as a separate trade", rate: 15.1},
+{id: 719, trade: "Umbrella Mfgrs. - Where hand power is used", rate: 9.25},
+{id: 720, trade: "Umbrella Mfgrs. - Where any mechanically driven machinery is used", rate: 12.15},
+{id: 721, trade: "Undertaker - Shop", rate: 15.1},
+{id: 722, trade: "Undertaker - Wood working machinists", rate: 30.15},
+{id: 723, trade: "Undertaker - Outside and stable", rate: 30.15},
+{id: 724, trade: "Upholsterers", rate: 9.25},
+{id: 725, trade: "Varnish Japan & Laquer Mfgrs.", rate: 15.1},
+{id: 726, trade: "Vener Mfgrs other than wood working machinists where carried on as separate trade -Wood working machinists", rate: 30.15},
+{id: 727, trade: "Vener Mfgrs other than wood working machinists where carried on as separate trade - All other employees", rate: 12.15},
+{id: 728, trade: "Veterinary Colleges - Lecturers engaged indoors", rate: 5.85},
+{id: 729, trade: "Veterinary Colleges - All other employees", rate: 24.3},
+{id: 730, trade: "Veterinary Surgeons and Attendants and Grooms in employ of Veterinary Surgeons", rate: 60.8},
+{id: 731, trade: "Warehouse (Godwons) - Hands in warehouse receiving or delivering from or to vessels and/or on dock, quayside or wharf, and lightmen and Bargemen (excl. Stevedors)", rate: 72.95},
+{id: 732, trade: "Warehouse (Godwons) Group I - Art, Bric-a-Brac, Curio", rate: 9.25},
+{id: 733, trade: "Warehouse (Godwons) Group I - Biscuit", rate: 9.25},
+{id: 734, trade: "Warehouse (Godwons) Group I - Bonded Warhouses - Incl. hand bottling", rate: 9.25},
+{id: 735, trade: "Warehouse (Godwons) Group I - China Glass and earthware", rate: 9.25},
+{id: 736, trade: "Warehouse (Godwons) Group I - Colour, Dyes and Chemicals", rate: 9.25},
+{id: 737, trade: "Warehouse (Godwons) Group I - Drug", rate: 9.25},
+{id: 738, trade: "Warehouse (Godwons) Group I - Drysalters", rate: 9.25},
+{id: 739, trade: "Warehouse (Godwons) Group I - Flax", rate: 9.25},
+{id: 740, trade: "Warehouse (Godwons) Group I - India Rubber", rate: 9.25},
+{id: 741, trade: "Warehouse (Godwons) Group I - Linen", rate: 9.25},
+{id: 742, trade: "Warehouse (Godwons) Group I - Oil and Italian Goods", rate: 9.25},
+{id: 743, trade: "Warehouse (Godwons) Group I - Publishers and Booksellers", rate: 9.25},
+{id: 744, trade: "Warehouse (Godwons) Group I - Sack and Bag", rate: 9.25},
+{id: 745, trade: "Warehouse (Godwons) Group I - Shellac", rate: 9.25},
+{id: 746, trade: "Warehouse (Godwons) Group I - Smallware (Braid, laces not leather, tussles and cords)", rate: 9.25},
+{id: 747, trade: "Warehouse (Godwons) Group I - Soft goods (textile) not Packers & Makers up as separate trade and not Forwarding and Shipping Agents - Where no packing is done by mechanical power", rate: 9.25},
+{id: 748, trade: "Warehouse (Godwons) Group I - Sugar", rate: 9.25},
+{id: 749, trade: "Warehouse (Godwons) Group I - Tea and Coffee", rate: 9.25},
+{id: 750, trade: "Warehouse (Godwons) Group I - Wholesale Grocery and provision incl. salesmen", rate: 9.25},
+{id: 751, trade: "Warehouse (Godwons) Group II - Bath Brick and Salt Merchants", rate: 12.15},
+{id: 752, trade: "Warehouse (Godwons) Group II - Bone incl. Anthrax", rate: 12.15},
+{id: 753, trade: "Warehouse (Godwons) Group II - Bottle", rate: 12.15},
+{id: 754, trade: "Warehouse (Godwons) Group II - Carpet, rug and linoleum", rate: 12.15},
+{id: 755, trade: "Warehouse (Godwons) Group II - Furniture", rate: 12.15},
+{id: 756, trade: "Warehouse (Godwons) Group II - Hardware and Ironmongery", rate: 12.15},
+{id: 757, trade: "Warehouse (Godwons) Group II - Leather and Leather Goods", rate: 12.15},
+{id: 758, trade: "Warehouse (Godwons) Group II - Molasses - Incl. filling by hand", rate: 12.15},
+{id: 759, trade: "Warehouse (Godwons) Group II - Packers and Makers up as trade", rate: 12.15},
+{id: 760, trade: "Warehouse (Godwons) Group II - Paper", rate: 12.15},
+{id: 761, trade: "Warehouse (Godwons) Group II - Public (general storing) Warhouses", rate: 12.15},
+{id: 762, trade: "Warehouse (Godwons) Group II - Soft goods (textile) not Packers and Makers up as a trade and not Forwarding and Shipping Agents - Where any packing is done by mechanical power", rate: 12.15},
+{id: 763, trade: "Warehouse (Godwons) Group II - Wool incl. Anthrax", rate: 12.15},
+{id: 764, trade: "Warehouse (Godwons) Group III - Branded Warehouses (on machine bottling wages only)", rate: 30.15},
+{id: 765, trade: "Warehouse (Godwons) Group IV - Machinery, Iron and Steel girders and heavy ironware incl. delivery by any vehicle mechanical or otherwise", rate: 36.5},
+{id: 766, trade: "Waterworks and Pumping Stations - Excl. construction, alteration maintenance or repair work, the sinking or digging of wells and the use of Explosives", rate: 18.5},
+{id: 767, trade: "Waterworks and Pumping Stations - Construction, alteration maintenance or repair work excl. Use of explosives", rate: 42.8},
+{id: 768, trade: "Waterworks and Pumping Stations - Construction, alteration maintenance or repair work incl. use of explosives", rate: 97.3},
+{id: 769, trade: "Waterworks and Pumping Stations - Tunnelling incl. blasting (when carried out as a separate contract)", rate: 97.3},
+{id: 770, trade: "Weaving and Printing of Cloth by Hand Power", rate: 6.1},
+{id: 771, trade: "Welders, where carried on as a separate trade", rate: 36.5},
+{id: 772, trade: "Welders at a height not exceeding 60 feet", rate: 60.8},
+{id: 773, trade: "Well Sinking - Artesian or Tube", rate: 30.15},
+{id: 774, trade: "Well Sinking - Other Wells", rate: 121.6},
+{id: 775, trade: "Whiting and Pipeclay Mfgrs. - Excl. Mining Quarry", rate: 18.5},
+{id: 776, trade: "Window Cleaners", rate: 97.3},
+{id: 777, trade: "Wire Drawers and Wire Ropes Mfgrs - Gold and Silver Wire Drawers", rate: 9.25},
+{id: 778, trade: "Wire Drawers and Wire Ropes Mfgrs - Brass and Copper Wire Drawers", rate: 12.15},
+{id: 779, trade: "Wire Drawers and Wire Ropes Mfgrs - Steel and Iron Wire Drawers and wire Ropes Mfgrs.", rate: 36.6},
+{id: 780, trade: "Wire Goods Makers", rate: 21.4},
+{id: 781, trade: "Wireless Schools - Tuition and Demonstration", rate: 30.15},
+{id: 782, trade: "Wood Ware Mfgrs. and Turners - Wood working machinists", rate: 30.15},
+{id: 783, trade: "Wood Ware Mfgrs. and Turners - All other employees", rate: 24.3},
+{id: 784, trade: "Woodmen and Foresters engaged in Treefelling Sawing and Carting and/or Forest Fire Fighting", rate: 42.8},
+{id: 785, trade: "Woolen and Worsted - Wool-combing - Incl. Anthrax", rate: 36.5},
+{id: 786, trade: "Woolen and Worsted - Wool-combing - Excl. Anthrax", rate: 15.1},
+{id: 787, trade: "Woolen and Worsted - Spinning Weaving, Bleaching, Dyeing and all Processes other than Wool-combing incidental to the trade carried on in or about the premises", rate: 15.1},
+{id: 788, trade: "Woolen and Worsted - Flock, Mungo and Shoddy", rate: 24.3},
+{id: 789, trade: "Wool Sorter and/or Wool Waste merchants - Incl. Anthrax", rate: 24.3},
+{id: 790, trade: "Wool Sorter and/or Wool Waste merchants - Excl. Anthrax", rate: 12.15},
+{id: 791, trade: "Wool Scourers and Carbonizers - Where no wool-combing is done - Incl. Anthrax", rate: 24.3},
+{id: 792, trade: "Wool Scourers and Carbonizers - Where no wool-combing is done - Excl. Anthrax", rate: 15.1},
+{id: 793, trade: "Wool Scourers and Carbonizers - Where any wool-combing is done - Incl. Anthrax", rate: 36.5},
+{id: 794, trade: "Wool Scourers and Carbonizers - Where any wool-combing is done - Excl. Anthrax", rate: 24.3},
+{id: 795, trade: "Writing Slate Mfgrs.", rate: 33.55},
+{id: 796, trade: "Yarn and Trade Bleachers and/or Dyers- With or without machinery where yarn and trade only are handled (and where no bleaching or dyeing of any other materials is done)", rate: 7.8},
+{id: 797, trade: "Yeast Mfgrs.", rate: 12.15},
+{id: 798, trade: "Zinc Smelters and/or Extractors", rate: 36.5},
+{id: 799, trade: "Zinc Cooper and Brass Rolling where no smelting is done", rate: 36.5}
+
+        ];
+
+        // Store added categories
+        let categories = [];
+        let selectedTrade = null;
+
+        // DOM Elements
+        const tradeSearch = document.getElementById('tradeSearch');
+        const tradeResults = document.getElementById('tradeResults');
+        const numEmployees = document.getElementById('numEmployees');
+        const wagePerMonth = document.getElementById('wagePerMonth');
+        const tradeRate = document.getElementById('tradeRate');
+        const tradeDescription = document.getElementById('tradeDescription');
+        const addCategoryBtn = document.getElementById('addCategory');
+        const categoriesBody = document.getElementById('categoriesBody');
+        const categoryCount = document.getElementById('categoryCount');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const exportPdfBtn = document.getElementById('exportPdf');
+        const periodSelect = document.getElementById('period');
+        const medicalSI = document.getElementById('medicalSI');
+        const toggleDetailsBtn = document.getElementById('toggleDetails');
+        const detailedCalculation = document.getElementById('detailedCalculation');
+
+        // Detail inputs
+        const officeName = document.getElementById('officeName');
+        const officeCode = document.getElementById('officeCode');
+        const insuredName = document.getElementById('insuredName');
+        const insuredAddress = document.getElementById('insuredAddress');
+        const insuredMobile = document.getElementById('insuredMobile');
+        const insuredEmail = document.getElementById('insuredEmail');
+        const intermediaryName = document.getElementById('intermediaryName');
+        const intermediaryCode = document.getElementById('intermediaryCode');
+        const intermediaryMobile = document.getElementById('intermediaryMobile');
+
+        // Discount/Loading inputs
+        const medicalLoadingInput = document.getElementById('medicalLoading');
+        const basicDiscountInput = document.getElementById('basicDiscount');
+        const basicLoadingInput = document.getElementById('basicLoading');
+        const medicalDiscountInput = document.getElementById('medicalDiscount');
+        const stampDutyInput = document.getElementById('stampDuty');
+
+        // Summary elements
+        const basicPremiumEl = document.getElementById('basicPremium');
+        const medicalPremiumEl = document.getElementById('medicalPremium');
+        const basicDiscountEl = document.getElementById('basicDiscountDisplay');
+        const medicalDiscountEl = document.getElementById('medicalDiscountDisplay');
+        const basicLoadingEl = document.getElementById('basicLoadingDisplay');
+        const medicalLoadingEl = document.getElementById('medicalLoadingDisplay');
+        const stampDutyEl = document.getElementById('stampDutyDisplay');
+        const netPremiumEl = document.getElementById('netPremium');
+        const cgstEl = document.getElementById('cgst');
+        const sgstEl = document.getElementById('sgst');
+        const grossPremiumEl = document.getElementById('grossPremium');
+        const totalEmployeesEl = document.getElementById('totalEmployees');
+        const totalWageEl = document.getElementById('totalWage');
+        const totalCategoriesEl = document.getElementById('totalCategories');
+
+        // Toggle detailed calculation
+        toggleDetailsBtn.addEventListener('click', function() {
+            const isCollapsed = detailedCalculation.classList.contains('details-collapsed');
+            detailedCalculation.classList.toggle('details-collapsed');
+            this.innerHTML = isCollapsed ? 
+                '<i class="fas fa-eye-slash"></i> Hide Details' : 
+                '<i class="fas fa-eye"></i> Show Details';
+        });
+
+        // Search trades
+        tradeSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            tradeResults.innerHTML = '';
+            
+            if (searchTerm.length < 1) {
+                tradeResults.style.display = 'none';
+                return;
+            }
+            
+            const filtered = tariffData.filter(item => 
+                item.trade.toLowerCase().includes(searchTerm)
+            ).slice(0, 20); // Limit to 20 results
+            
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'trade-item';
+                    div.innerHTML = `
+                        <div class="trade-name">${item.trade}</div>
+                        <div class="trade-rate">Rate: Rs. ${item.rate.toFixed(2)} per mille</div>
+                    `;
+                    div.addEventListener('click', () => selectTrade(item));
+                    tradeResults.appendChild(div);
+                });
+                tradeResults.style.display = 'block';
+            } else {
+                tradeResults.innerHTML = '<div class="trade-item">No trades found</div>';
+                tradeResults.style.display = 'block';
+            }
+        });
+
+        // Select a trade
+        function selectTrade(trade) {
+            selectedTrade = trade;
+            tradeRate.value = trade.rate.toFixed(2);
+            tradeDescription.value = trade.trade;
+            tradeResults.style.display = 'none';
+            tradeSearch.value = trade.trade;
+        }
+
+        // Add category
+        addCategoryBtn.addEventListener('click', function() {
+            if (!selectedTrade) {
+                alert('Please select a trade first');
+                return;
+            }
+            
+            const employees = parseInt(numEmployees.value) || 1;
+            const wage = parseFloat(wagePerMonth.value) || 0;
+            const rate = parseFloat(tradeRate.value) || 0;
+            
+            if (wage <= 0) {
+                alert('Please enter a valid wage amount');
+                return;
+            }
+            
+            const category = {
+                id: Date.now(),
+                trade: selectedTrade.trade,
+                employees: employees,
+                wage: wage,
+                rate: rate,
+                premium: 0,
+                breakdown: {
+                    first15000Premium: 0,
+                    balancePremium: 0
+                }
+            };
+            
+            categories.push(category);
+            updateCategoriesTable();
+            resetForm();
+            updateStats();
+        });
+
+        // Calculate premium breakdown for a single category
+        function calculateCategoryBreakdown(category, period) {
+            const baseRate = category.rate;
+            const wage = category.wage;
+            const employees = category.employees;
+            
+            // First Rs. 15,000
+            const first15000 = Math.min(wage, 15000);
+            const first15000PremiumPerEmp = (first15000 * baseRate / 1000);
+            
+            // Balance wage
+            const balanceWage = Math.max(wage - 15000, 0);
+            const balanceRate = Math.max(2, baseRate * 0.0625);
+            const balancePremiumPerEmp = (balanceWage * balanceRate / 1000);
+            
+            // Total per employee per month
+            const totalPerEmpPerMonth = first15000PremiumPerEmp + balancePremiumPerEmp;
+            
+            // Total for all employees for the period
+            const totalPremium = totalPerEmpPerMonth * employees * period;
+            
+            return {
+                first15000Premium: first15000PremiumPerEmp * employees * period,
+                balancePremium: balancePremiumPerEmp * employees * period,
+                totalPremium: totalPremium,
+                perEmpPerMonth: totalPerEmpPerMonth
+            };
+        }
+
+        // Update categories table with breakdown tooltip
+        function updateCategoriesTable() {
+            categoriesBody.innerHTML = '';
+            
+            categories.forEach((cat, index) => {
+                const row = document.createElement('tr');
+                const period = parseInt(periodSelect.value) || 12;
+                const breakdown = calculateCategoryBreakdown(cat, period);
+                cat.premium = breakdown.totalPremium;
+                cat.breakdown = breakdown;
+                
+                // Create tooltip for breakdown
+                const breakdownTooltip = `
+                    <div class="breakdown-tooltip">
+                        <div class="breakdown-item">
+                            <span>First Rs. 15,000:</span>
+                            <span>Rs. ${breakdown.first15000Premium.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Balance Wage:</span>
+                            <span>Rs. ${breakdown.balancePremium.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Total (${period} months):</span>
+                            <span>Rs. ${breakdown.totalPremium.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                        </div>
+                    </div>
+                `;
+                
+                row.innerHTML = `
+                    <td>${cat.trade}</td>
+                    <td>${cat.employees}</td>
+                    <td>Rs. ${cat.wage.toLocaleString('en-IN')}</td>
+                    <td>${cat.rate.toFixed(2)}‰</td>
+                    <td>
+                        <div class="premium-breakdown" style="position:relative;">
+                            Rs. ${cat.premium.toLocaleString('en-IN', {minimumFractionDigits: 2})}
+                            ${breakdownTooltip}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="icon-btn icon-btn-edit" onclick="editCategory(${index})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="icon-btn icon-btn-delete" onclick="deleteCategory(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                categoriesBody.appendChild(row);
+            });
+            
+            categoryCount.textContent = `${categories.length} Categor${categories.length === 1 ? 'y' : 'ies'}`;
+        }
+
+        // Edit category
+        window.editCategory = function(index) {
+            const cat = categories[index];
+            selectedTrade = {trade: cat.trade, rate: cat.rate};
+            numEmployees.value = cat.employees;
+            wagePerMonth.value = cat.wage;
+            tradeRate.value = cat.rate.toFixed(2);
+            tradeDescription.value = cat.trade;
+            tradeSearch.value = cat.trade;
+            
+            categories.splice(index, 1);
+            updateCategoriesTable();
+            updateStats();
+        };
+
+        // Delete category
+        window.deleteCategory = function(index) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                categories.splice(index, 1);
+                updateCategoriesTable();
+                updateStats();
+            }
+        };
+
+        // Reset form
+        function resetForm() {
+            selectedTrade = null;
+            numEmployees.value = 1;
+            wagePerMonth.value = 15000;
+            tradeRate.value = '';
+            tradeDescription.value = '';
+            tradeSearch.value = '';
+            tradeResults.style.display = 'none';
+        }
+
+        document.getElementById('resetForm').addEventListener('click', resetForm);
+
+        // Update stats
+        function updateStats() {
+            const totalEmp = categories.reduce((sum, cat) => sum + cat.employees, 0);
+            const totalWage = categories.reduce((sum, cat) => sum + (cat.wage * cat.employees), 0);
+            
+            totalEmployeesEl.textContent = totalEmp.toLocaleString('en-IN');
+            totalWageEl.textContent = `Rs. ${totalWage.toLocaleString('en-IN')}`;
+            totalCategoriesEl.textContent = categories.length;
+        }
+
+        // Calculate total premium
+        calculateBtn.addEventListener('click', calculatePremium);
+
+        function calculatePremium() {
+            if (categories.length === 0) {
+                alert('Please add at least one employee category');
+                return;
+            }
+            
+            const period = parseInt(periodSelect.value) || 1;
+            
+            // Calculate basic premium
+            let basicPremium = 0;
+            categories.forEach(cat => {
+                const breakdown = calculateCategoryBreakdown(cat, period);
+                cat.premium = breakdown.totalPremium;
+                cat.breakdown = breakdown;
+                basicPremium += cat.premium;
+            });
+            
+            // Get user inputs for discounts/loadings
+            const medicalLoading = parseFloat(medicalLoadingInput.value) || 0;
+            const basicLoading = parseFloat(basicLoadingInput.value) || 0;
+            const basicDiscountRate = parseFloat(basicDiscountInput.value) || 0;
+            const medicalDiscountRate = parseFloat(medicalDiscountInput.value) || 0;
+            const stampDuty = parseFloat(stampDutyInput.value) || 0;
+            
+            // Medical expense premium (calculated from basic premium)
+            const medicalPremium = basicPremium * (medicalLoading / 100);
+            
+            // Discounts
+            const basicDiscount = basicPremium * (basicDiscountRate / 100);
+            const medicalDiscount = medicalPremium * (medicalDiscountRate / 100);
+            
+            // Loadings
+            const basicLoadingAmount = basicPremium * (basicLoading / 100);
+            const medicalLoadingAmount = medicalPremium * (medicalLoading / 100);
+            
+            // Net premium (basic + medical - discounts + loadings)
+            const netPremium = Math.round(basicPremium + medicalPremium - basicDiscount - medicalDiscount + basicLoadingAmount + medicalLoadingAmount);
+            
+            // Taxes (9% CGST + 9% SGST = 18% total)
+            const cgst = Math.round(netPremium * 0.09);
+            const sgst = Math.round(netPremium * 0.09);
+            
+            // Gross premium
+            const grossPremium = netPremium + cgst + sgst + stampDuty;
+            
+            // Update UI
+            basicPremiumEl.textContent = `Rs. ${basicPremium.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            medicalPremiumEl.textContent = `Rs. ${medicalPremium.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            basicDiscountEl.textContent = `-Rs. ${basicDiscount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            medicalDiscountEl.textContent = `-Rs. ${medicalDiscount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            basicLoadingEl.textContent = `+Rs. ${basicLoadingAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            medicalLoadingEl.textContent = `+Rs. ${medicalLoadingAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            stampDutyEl.textContent = `Rs. ${stampDuty.toLocaleString('en-IN')}`;
+            netPremiumEl.textContent = `Rs. ${netPremium.toLocaleString('en-IN')}`;
+            cgstEl.textContent = `Rs. ${cgst.toLocaleString('en-IN')}`;
+            sgstEl.textContent = `Rs. ${sgst.toLocaleString('en-IN')}`;
+            grossPremiumEl.textContent = `Rs. ${grossPremium.toLocaleString('en-IN')}`;
+            
+            updateCategoriesTable();
+        }
+
+        // PDF Export functionality
+        const pdfModal = document.getElementById('pdfModal');
+        const closeModal = document.querySelector('.close');
+        const downloadPdfBtn = document.getElementById('downloadPdf');
+        const printQuoteBtn = document.getElementById('printQuote');
+        const pdfContent = document.getElementById('pdfContent');
+
+        exportPdfBtn.addEventListener('click', function() {
+            if (categories.length === 0) {
+                alert('Please add categories and calculate premium first');
+                return;
+            }
+            
+            // Generate PDF content for preview
+            generatePdfPreview();
+            pdfModal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', function() {
+            pdfModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === pdfModal) {
+                pdfModal.style.display = 'none';
+            }
+        });
+
+        // Generate PDF Preview
+        function generatePdfPreview() {
+            const period = parseInt(periodSelect.value) || 1;
+            const medicalSIValue = parseInt(medicalSI.value);
+            const medicalLoading = parseFloat(medicalLoadingInput.value) || 0;
+            const basicDiscountRate = parseFloat(basicDiscountInput.value) || 0;
+            const medicalDiscountRate = parseFloat(medicalDiscountInput.value) || 0;
+            const basicLoading = parseFloat(basicLoadingInput.value) || 0;
+            
+            let medicalCover = 'No Medical Cover';
+            if (medicalSIValue === 25000) medicalCover = 'Rs. 25,000';
+            else if (medicalSIValue === 50000) medicalCover = 'Rs. 50,000';
+            else if (medicalSIValue === 100000) medicalCover = 'Rs. 1,00,000';
+            
+            const today = new Date();
+            const quoteDate = today.toLocaleDateString('en-IN', { 
+                day: '2-digit', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            // Get current premium values
+            const basicPremium = parseFloat(basicPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const medicalPremium = parseFloat(medicalPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const basicDiscount = parseFloat(basicDiscountEl.textContent.replace('-Rs.', '').replace(/,/g, '')) || 0;
+            const medicalDiscount = parseFloat(medicalDiscountEl.textContent.replace('-Rs.', '').replace(/,/g, '')) || 0;
+            const basicLoadingAmount = parseFloat(basicLoadingEl.textContent.replace('+Rs.', '').replace(/,/g, '')) || 0;
+            const medicalLoadingAmount = parseFloat(medicalLoadingEl.textContent.replace('+Rs.', '').replace(/,/g, '')) || 0;
+            const stampDuty = parseFloat(stampDutyEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const netPremium = parseFloat(netPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const cgst = parseFloat(cgstEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const sgst = parseFloat(sgstEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const grossPremium = parseFloat(grossPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            
+            let html = `
+                <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: white;">
+                    <!-- Header -->
+                    <div style="border-bottom: 3px solid #2563eb; padding-bottom: 15px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h2 style="color: #2563eb; margin: 0;">${officeName.value || 'Insurance Office'}</h2>
+                                <p style="margin: 5px 0; color: #64748b;">Code: ${officeCode.value || 'N/A'}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <h3 style="color: #1e293b; margin: 0;">PREMIUM QUOTATION</h3>
+                                <p style="margin: 5px 0; color: #64748b;">Date: ${quoteDate}</p>
+                                <p style="margin: 5px 0; color: #64748b;">Ref: WC/${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${Math.floor(Math.random() * 1000)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Insured Details -->
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4 style="color: #1e293b; margin-bottom: 10px;">To,</h4>
+                        <p style="margin: 5px 0; font-weight: bold;">${insuredName.value || 'Insured Name'}</p>
+                        <p style="margin: 5px 0;">${insuredAddress.value || 'Insured Address'}</p>
+                        <p style="margin: 5px 0;">Mobile: ${insuredMobile.value || 'N/A'}</p>
+                        <p style="margin: 5px 0;">Email: ${insuredEmail.value || 'N/A'}</p>
+                    </div>
+                    
+                    <!-- Subject Line -->
+                    <div style="margin: 20px 0; padding: 10px; background: #e0f2fe; border-left: 4px solid #2563eb;">
+                        <h3 style="color: #1e293b; margin: 0;">Subject: Quotation for Workmen's Compensation Insurance</h3>
+                    </div>
+                    
+                    <!-- Opening Paragraph -->
+                    <div style="margin-bottom: 25px; line-height: 1.6;">
+                        <p>Dear Sir/Madam,</p>
+                        <p>Thank you for providing us the opportunity to quote for your Workmen's Compensation Insurance requirements. We are pleased to submit our premium quotation based on the details provided.</p>
+                    </div>
+                    
+                    <!-- Policy Details -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">Policy Details</h4>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
+                            <div><strong>Period of Insurance:</strong> ${period} Month(s)</div>
+                            <div><strong>Medical Cover:</strong> ${medicalCover}</div>
+                            <div><strong>Medical Loading:</strong> ${medicalLoading}%</div>
+                            <div><strong>Basic Loading:</strong> ${basicLoading}%</div>
+                            <div><strong>Basic Discount:</strong> ${basicDiscountRate}%</div>
+                            <div><strong>Medical Discount:</strong> ${medicalDiscountRate}%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Employee Categories -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">Employee Categories</h4>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="background: #2563eb; color: white;">
+                                    <th style="padding: 10px; text-align: left;">Trade/Business</th>
+                                    <th style="padding: 10px; text-align: center;">Employees</th>
+                                    <th style="padding: 10px; text-align: right;">Wage/Month/Employee</th>
+                                    <th style="padding: 10px; text-align: center;">Rate</th>
+                                    <th style="padding: 10px; text-align: right;">Premium</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            
+            categories.forEach(cat => {
+                html += `
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 10px;">${cat.trade}</td>
+                        <td style="padding: 10px; text-align: center;">${cat.employees}</td>
+                        <td style="padding: 10px; text-align: right;">Rs. ${cat.wage.toLocaleString('en-IN')}</td>
+                        <td style="padding: 10px; text-align: center;">${cat.rate.toFixed(2)}‰</td>
+                        <td style="padding: 10px; text-align: right;">Rs. ${cat.premium.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Premium Calculation -->
+                    <div style="margin-bottom: 25px; background: #f8fafc; padding: 20px; border-radius: 8px;">
+                        <h4 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 15px;">Premium Calculation Summary</h4>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 8px 0;">Basic Premium</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold;">Rs. ${basicPremium.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Medical Expense Premium (${medicalLoading}%)</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold;">Rs. ${medicalPremium.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Less: Basic Premium Discount (${basicDiscountRate}%)</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #ef4444;">-Rs. ${basicDiscount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Less: Medical Expense Discount (${medicalDiscountRate}%)</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #ef4444;">-Rs. ${medicalDiscount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Add: Basic Premium Loading (${basicLoading}%)</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #10b981;">+Rs. ${basicLoadingAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Add: Medical Expense Loading (${medicalLoading}%)</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #10b981;">+Rs. ${medicalLoadingAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Stamp Duty</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold;">Rs. ${stampDuty.toLocaleString('en-IN')}</td>
+                            </tr>
+                            <tr style="border-top: 2px solid #1e293b;">
+                                <td style="padding: 12px 0; font-weight: bold;">Net Premium</td>
+                                <td style="padding: 12px 0; text-align: right; font-weight: bold; font-size: 1.1em;">Rs. ${netPremium.toLocaleString('en-IN')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Add: CGST @ 9%</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold;">Rs. ${cgst.toLocaleString('en-IN')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;">Add: SGST @ 9%</td>
+                                <td style="padding: 8px 0; text-align: right; font-weight: bold;">Rs. ${sgst.toLocaleString('en-IN')}</td>
+                            </tr>
+                            <tr style="border-top: 2px solid #2563eb;">
+                                <td style="padding: 15px 0; font-weight: bold; font-size: 1.2em; color: #2563eb;">Gross Premium Payable</td>
+                                <td style="padding: 15px 0; text-align: right; font-weight: bold; font-size: 1.2em; color: #2563eb;">Rs. ${grossPremium.toLocaleString('en-IN')}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Terms & Conditions -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">Terms & Conditions</h4>
+                        <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.6; font-size: 0.9rem;">
+                            <li>This quotation is valid for 30 days from the date of issue.</li>
+                            <li>Premium is subject to change based on actual risk exposure.</li>
+                            <li>Policy terms and conditions are as per standard Workmen's Compensation tariff.</li>
+                            <li>First Rs. 15,000 of monthly wage per employee is rated at full tariff rate.</li>
+                            <li>Balance wage is rated at 6.25% of tariff rate (minimum Rs. 2 per mille).</li>
+                            <li>All statutory taxes as applicable will be extra.</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Closing Paragraph -->
+                    <div style="margin-bottom: 30px; line-height: 1.6;">
+                        <p>We believe this offer meets your requirements and look forward to your positive response. Should you have any queries or require further clarification, please do not hesitate to contact us.</p>
+                        <p>Thank you for considering our services.</p>
+                    </div>
+                    
+                    <!-- Signatory (Intermediary) -->
+                    <div style="margin-top: 40px;">
+                        <p style="margin-bottom: 5px;">Yours faithfully,</p>
+                        <p style="font-weight: bold; margin-bottom: 5px;">For ${intermediaryName.value || 'Insurance Intermediary'}</p>
+                        <p style="margin-bottom: 20px;">Authorized Signatory</p>
+                    </div>
+                    
+                    <!-- Office Details at Bottom -->
+                    <div style="border-top: 2px solid #e2e8f0; padding-top: 20px; margin-top: 30px; font-size: 0.9rem; color: #64748b;">
+                        <p><strong>Office Details:</strong> ${officeName.value || 'Insurance Office'} (Code: ${officeCode.value || 'N/A'})</p>
+                        <p><strong>Intermediary:</strong> ${intermediaryName.value || 'N/A'} | Code: ${intermediaryCode.value || 'N/A'} | Mobile: ${intermediaryMobile.value || 'N/A'}</p>
+                        <p style="font-style: italic; margin-top: 10px;">This is a computer-generated quotation. No signature is required.</p>
+                    </div>
+                </div>
+            `;
+            
+            pdfContent.innerHTML = html;
+        }
+
+        // Download PDF with jsPDF and autotable
+        downloadPdfBtn.addEventListener('click', async function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            
+            // Set document properties
+            doc.setProperties({
+                title: 'Workmen Compensation Premium Quotation',
+                subject: 'Insurance Quotation',
+                author: officeName.value || 'Insurance Office',
+                keywords: 'workmen, compensation, insurance, premium, quotation'
+            });
+            
+            // Add watermark
+            doc.setTextColor(200, 200, 200);
+            doc.setFontSize(40);
+            doc.text('QUOTATION', 105, 150, { align: 'center', angle: 45 });
+            doc.setTextColor(0, 0, 0);
+            
+            // Letterhead
+            doc.setFontSize(20);
+            doc.setTextColor(37, 99, 235);
+            doc.text(officeName.value || 'Insurance Office', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 116, 139);
+            doc.text(`Code: ${officeCode.value || 'N/A'}`, 105, 27, { align: 'center' });
+            
+            doc.setFontSize(16);
+            doc.setTextColor(30, 41, 59);
+            doc.text('PREMIUM QUOTATION', 105, 40, { align: 'center' });
+            
+            const today = new Date();
+            doc.setFontSize(10);
+            doc.text(`Date: ${today.toLocaleDateString('en-IN')}`, 20, 50);
+            doc.text(`Ref: WC/${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${Math.floor(Math.random() * 1000)}`, 20, 55);
+            
+            // Insured Details
+            doc.setFontSize(12);
+            doc.setTextColor(30, 41, 59);
+            doc.text('To,', 20, 70);
+            
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.text(insuredName.value || 'Insured Name', 20, 77);
+            doc.setFont('helvetica', 'normal');
+            
+            const addressLines = doc.splitTextToSize(insuredAddress.value || 'Insured Address', 80);
+            doc.text(addressLines, 20, 84);
+            doc.text(`Mobile: ${insuredMobile.value || 'N/A'}`, 20, 94);
+            doc.text(`Email: ${insuredEmail.value || 'N/A'}`, 20, 100);
+            
+            // Subject Line
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Subject: Quotation for Workmen\'s Compensation Insurance', 20, 115);
+            
+            // Opening Paragraph
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+            const openingLines = doc.splitTextToSize('Dear Sir/Madam,\n\nThank you for providing us the opportunity to quote for your Workmen\'s Compensation Insurance requirements. We are pleased to submit our premium quotation based on the details provided.', 170);
+            doc.text(openingLines, 20, 125);
+            
+            // Policy Details Table
+            const period = parseInt(periodSelect.value) || 1;
+            const medicalSIValue = parseInt(medicalSI.value);
+            const medicalLoading = parseFloat(medicalLoadingInput.value) || 0;
+            const basicDiscountRate = parseFloat(basicDiscountInput.value) || 0;
+            const medicalDiscountRate = parseFloat(medicalDiscountInput.value) || 0;
+            const basicLoading = parseFloat(basicLoadingInput.value) || 0;
+            
+            let medicalCover = 'No Medical Cover';
+            if (medicalSIValue === 25000) medicalCover = 'Rs. 25,000';
+            else if (medicalSIValue === 50000) medicalCover = 'Rs. 50,000';
+            else if (medicalSIValue === 100000) medicalCover = 'Rs. 1,00,000';
+            
+            doc.autoTable({
+                startY: 150,
+                head: [['Policy Details', 'Value']],
+                body: [
+                    ['Period of Insurance', `${period} Month(s)`],
+                    ['Medical Cover', medicalCover],
+                    ['Medical Loading', `${medicalLoading}%`],
+                    ['Basic Loading', `${basicLoading}%`],
+                    ['Basic Discount', `${basicDiscountRate}%`],
+                    ['Medical Discount', `${medicalDiscountRate}%`]
+                ],
+                theme: 'grid',
+                headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255] }
+            });
+            
+            // Employee Categories Table
+            const categoriesData = categories.map(cat => [
+                cat.trade.length > 30 ? cat.trade.substring(0, 30) + '...' : cat.trade,
+                cat.employees.toString(),
+                `Rs. ${cat.wage.toLocaleString('en-IN')}`,
+                `Rs. ${cat.rate.toFixed(2)}‰`,
+                `Rs. ${cat.premium.toLocaleString('en-IN', {minimumFractionDigits: 2})}`
+            ]);
+            
+            doc.autoTable({
+                startY: doc.lastAutoTable.finalY + 10,
+                head: [['Trade/Business', 'Employees', 'Wage/Month/Employee', 'Rate', 'Premium']],
+                body: categoriesData,
+                theme: 'grid',
+                headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255] },
+                columnStyles: {
+                    0: { cellWidth: 60 },
+                    1: { cellWidth: 25 },
+                    2: { cellWidth: 35 },
+                    3: { cellWidth: 25 },
+                    4: { cellWidth: 35 }
+                }
+            });
+            
+            // Premium Calculation
+            const basicPremium = parseFloat(basicPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const medicalPremium = parseFloat(medicalPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const basicDiscount = parseFloat(basicDiscountEl.textContent.replace('-Rs.', '').replace(/,/g, '')) || 0;
+            const medicalDiscount = parseFloat(medicalDiscountEl.textContent.replace('-Rs.', '').replace(/,/g, '')) || 0;
+            const basicLoadingAmount = parseFloat(basicLoadingEl.textContent.replace('+Rs.', '').replace(/,/g, '')) || 0;
+            const medicalLoadingAmount = parseFloat(medicalLoadingEl.textContent.replace('+Rs.', '').replace(/,/g, '')) || 0;
+            const stampDuty = parseFloat(stampDutyEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const netPremium = parseFloat(netPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const cgst = parseFloat(cgstEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const sgst = parseFloat(sgstEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            const grossPremium = parseFloat(grossPremiumEl.textContent.replace('Rs.', '').replace(/,/g, '')) || 0;
+            
+            doc.autoTable({
+                startY: doc.lastAutoTable.finalY + 10,
+                head: [['Description', 'Amount (Rs.)']],
+                body: [
+                    ['Basic Premium', basicPremium.toLocaleString('en-IN', {minimumFractionDigits: 2})],
+                    [`Medical Expense Premium (${medicalLoading}%)`, medicalPremium.toLocaleString('en-IN', {minimumFractionDigits: 2})],
+                    [`Less: Basic Discount (${basicDiscountRate}%)`, `-${basicDiscount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`],
+                    [`Less: Medical Discount (${medicalDiscountRate}%)`, `-${medicalDiscount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`],
+                    [`Add: Basic Loading (${basicLoading}%)`, `+${basicLoadingAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`],
+                    [`Add: Medical Loading (${medicalLoading}%)`, `+${medicalLoadingAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`],
+                    ['Stamp Duty', stampDuty.toLocaleString('en-IN')],
+                    ['Net Premium', netPremium.toLocaleString('en-IN')],
+                    ['Add: CGST @ 9%', cgst.toLocaleString('en-IN')],
+                    ['Add: SGST @ 9%', sgst.toLocaleString('en-IN')],
+                    ['Gross Premium Payable', grossPremium.toLocaleString('en-IN')]
+                ],
+                theme: 'grid',
+                headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255] },
+                bodyStyles: { fontSize: 10 },
+                columnStyles: {
+                    1: { halign: 'right' }
+                },
+                didParseCell: function(data) {
+                    if (data.row.index === 10) { // Gross Premium row
+                        data.cell.styles.fontStyle = 'bold';
+                        data.cell.styles.textColor = [37, 99, 235];
+                        data.cell.styles.fontSize = 11;
+                    }
+                }
+            });
+            
+            // Terms & Conditions
+            const termsY = doc.lastAutoTable.finalY + 10;
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Terms & Conditions:', 20, termsY);
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            const terms = [
+                '• This quotation is valid for 30 days from the date of issue.',
+                '• Premium is subject to change based on actual risk exposure.',
+                '• Policy terms and conditions are as per standard Workmen\'s Compensation tariff.',
+                '• First Rs. 15,000 of monthly wage per employee is rated at full tariff rate.',
+                '• Balance wage is rated at 6.25% of tariff rate (minimum Rs. 2 per mille).',
+                '• All statutory taxes as applicable will be extra.'
+            ];
+            
+            terms.forEach((term, index) => {
+                doc.text(term, 20, termsY + 10 + (index * 6));
+            });
+            
+            // Closing
+            const closingY = termsY + 10 + (terms.length * 6) + 10;
+            doc.setFontSize(11);
+            doc.text('Thank you for considering our services.', 20, closingY);
+            
+            // Signatory (Intermediary)
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Yours faithfully,', 20, closingY + 20);
+            
+            doc.setFontSize(11);
+            doc.text(`For ${intermediaryName.value || 'Insurance Intermediary'}`, 20, closingY + 30);
+            doc.text('Authorized Signatory', 20, closingY + 40);
+            
+            // Office Details at Bottom
+            doc.setFontSize(9);
+            doc.setTextColor(100, 116, 139);
+            doc.text(`Office: ${officeName.value || 'Insurance Office'} (Code: ${officeCode.value || 'N/A'})`, 20, 275);
+            doc.text(`Intermediary: ${intermediaryName.value || 'N/A'} | Code: ${intermediaryCode.value || 'N/A'} | Mobile: ${intermediaryMobile.value || 'N/A'}`, 20, 280);
+            doc.text('This is a computer-generated quotation. No signature is required.', 105, 285, { align: 'center' });
+            
+            // Save the PDF
+            doc.save(`WC_Quotation_${insuredName.value || 'Insured'}_${today.getTime()}.pdf`);
+            
+            pdfModal.style.display = 'none';
+        });
+
+        // Print Quote
+        printQuoteBtn.addEventListener('click', function() {
+            const printContent = pdfContent.innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: Arial, sans-serif;">
+                    ${printContent}
+                </div>
+            `;
+            
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload();
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.search-container')) {
+                tradeResults.style.display = 'none';
+            }
+        });
+
+        // Initialize sample data on load
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('WC Premium Calculator loaded successfully!');
+            
+            // You can uncomment the following to add sample data for testing
+            
+            /* 
+            // Set default values for testing
+            officeName.value = 'Insurance Services Ltd.';
+            officeCode.value = 'INS-001';
+            insuredName.value = 'ABC Manufacturing Company';
+            insuredAddress.value = '123 Industrial Area, Mumbai - 400001';
+            insuredMobile.value = '9876543210';
+            insuredEmail.value = 'info@abcmfg.com';
+            intermediaryName.value = 'Insurance Brokerage Services';
+            intermediaryCode.value = 'BROK-202';
+            intermediaryMobile.value = '9988776655';
+            
+            // Add a sample category for testing
+            selectedTrade = tariffData[0]; // First trade
+            numEmployees.value = 5;
+            wagePerMonth.value = 20000;
+            tradeRate.value = selectedTrade.rate.toFixed(2);
+            tradeDescription.value = selectedTrade.trade;
+            tradeSearch.value = selectedTrade.trade;
+            */
+        });
+    </script>
+</body>
+</html>
