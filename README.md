@@ -1,2 +1,0 @@
-# wc
-Employee Compensation Calculator
